@@ -66,7 +66,7 @@
         .prep-canva-link { width: 100%; max-width: 600px; background: var(--bg-base); border: 1px solid var(--border); padding: 12px 16px; border-radius: 8px; color: var(--text-main); font-size: 14px; outline: none; text-align: center; transition: 0.2s;}
         .prep-canva-link:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(70, 167, 88, 0.2);}
         
-        .prep-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; width: 100%; max-width: 900px; }
+        .prep-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; width: 100%; max-width: 900px; margin-bottom: 48px;}
         .prep-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px; transition: 0.2s;}
         .prep-card:hover { border-color: var(--text-muted); }
         .prep-card-title { font-size: 16px; font-weight: 600; color: var(--text-main); }
@@ -78,9 +78,13 @@
         .toggle-ready { background: rgba(70, 167, 88, 0.1); color: var(--status-active-txt); border: 1px solid rgba(70, 167, 88, 0.3); }
         .toggle-ready:hover { background: rgba(70, 167, 88, 0.2); }
 
+        /* Prep Log Section */
+        .prep-log-section { width: 100%; max-width: 1200px; margin-top: 24px; }
+        .prep-log-title { font-size: 16px; font-weight: 500; margin-bottom: 16px; color: var(--text-main); display: flex; align-items: center; gap: 8px;}
+
 
         /* =========================================
-           VIEW 2: SMART TRACKER (EXISTING)
+           VIEW 2: SMART TRACKER
            ========================================= */
         /* Global Rapid Dropzones */
         .global-dropzones { display: flex; gap: 16px; padding: 24px; background: var(--bg-base); overflow-x: auto; flex-shrink: 0;}
@@ -92,7 +96,7 @@
 
         /* DataGrid */
         .workspace { flex: 1; overflow: auto; padding: 0; position: relative; background: var(--bg-base);}
-        .datagrid { width: 100%; border-collapse: collapse; text-align: left; min-width: 1700px;}
+        .datagrid { width: 100%; border-collapse: collapse; text-align: left; min-width: 1200px;} /* Min-width reduced as columns removed */
         .datagrid th { position: sticky; top: 0; background: var(--surface); z-index: 10; padding: 12px 16px; font-size: 12px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); white-space: nowrap; box-shadow: 0 1px 0 var(--border);}
         .datagrid td { padding: 0; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); vertical-align: middle; height: 48px; background: transparent; transition: 0.1s;}
         .datagrid tr:hover td { background: var(--surface-hover); }
@@ -113,12 +117,6 @@
         .status-active { color: var(--status-active-txt); background: var(--status-active-bg); }
         .status-paused { color: var(--status-paused-txt); background: var(--status-paused-bg); }
 
-        /* Row Dropzone */
-        .file-dropzone { width: 100%; height: 100%; display: flex; align-items: center; justify-content: flex-start; padding: 0 16px; gap: 8px; cursor: pointer; transition: 0.2s; border: 2px dashed transparent;}
-        .file-dropzone.dragover { border-color: var(--accent); background: rgba(70, 167, 88, 0.1); }
-        .file-pill { display: inline-flex; align-items: center; gap: 6px; background: var(--surface); border: 1px solid var(--border); padding: 6px 10px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px;}
-        .file-pill:hover { border-color: var(--accent); }
-
         /* Connect Screen */
         #connect-screen { position: fixed; inset: 0; background: var(--bg-base); z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
         
@@ -131,8 +129,7 @@
 </head>
 <body>
 
-    <!-- Hidden Global File Inputs -->
-    <input type="file" id="row-file-upload" class="hidden" accept="image/*,video/*">
+    <!-- Hidden Global File Input -->
     <input type="file" id="top-file-upload" class="hidden" accept="image/*,video/*">
 
     <!-- Connection Screen -->
@@ -192,11 +189,36 @@
         <div class="prep-grid" id="prep-platform-grid">
             <!-- Cards injected via JS -->
         </div>
+
+        <!-- NEW: Creative Sets Log -->
+        <div class="prep-log-section">
+            <div class="prep-log-title"><i data-lucide="history" style="width: 16px; height: 16px;"></i> Creative Sets Log</div>
+            <div style="overflow-x: auto; background: var(--surface); border: 1px solid var(--border); border-radius: 8px;">
+                <table class="datagrid" style="min-width: 1000px; border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th style="width: 150px;">Date & Time</th>
+                            <th>Set Name</th>
+                            <th>Canva URL</th>
+                            <th class="text-center">Meta UK</th>
+                            <th class="text-center">Meta IE</th>
+                            <th class="text-center">Pin UK</th>
+                            <th class="text-center">Pin IE</th>
+                            <th class="text-center">TikTok UK</th>
+                            <th class="text-center">TikTok IE</th>
+                        </tr>
+                    </thead>
+                    <tbody id="prep-log-body">
+                        <!-- Log Rows Injected via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
         
     </div>
 
     <!-- =========================================
-         VIEW 2: SMART TRACKER (EXISTING)
+         VIEW 2: SMART TRACKER
          ========================================= -->
     <div id="view-tracker" class="view-container hidden">
         <!-- Rapid Ingestion Dropzones -->
@@ -218,11 +240,9 @@
                         <th style="width: 140px;">Start Date</th>
                         <th style="width: 140px;">End Date</th>
                         <th style="width: 100px; text-align: center;">Days</th>
-                        <th style="width: 260px;">Material File (Drop or Click)</th>
-                        <th style="width: 220px;">UTM Tracker</th>
                         <th style="width: 100px; text-align: right;">Purchases</th>
                         <th style="width: 100px; text-align: right;">ROAS</th>
-                        <th style="width: 60px; text-align: center;">Act</th>
+                        <th style="width: 100px; text-align: center;">Act</th>
                     </tr>
                 </thead>
                 <tbody id="grid-body">
@@ -261,6 +281,11 @@
                 setTimeout(() => toast.classList.remove('show'), 3000);
             },
 
+            getTimestamp() {
+                const now = new Date();
+                return now.toLocaleString('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+            },
+
             // 1. Connection & Setup
             async connectFolder() {
                 try {
@@ -271,7 +296,6 @@
                     await this.syncFolders();
                     await this.loadDatabase();
                     
-                    // Initialize Sets Engine
                     if (this.data.creativeSets.length === 0) {
                         this.createNewSet("Set1_1st week_May'26");
                     } else {
@@ -321,7 +345,6 @@
             
             switchView(viewName) {
                 if (viewName === 'tracker') {
-                    // GATEKEEPER CHECK: Is at least one platform ready in the active set?
                     const activeSet = this.data.creativeSets.find(s => s.id === this.activeSetId);
                     const isAnyReady = activeSet ? Object.values(activeSet.platforms).includes('ready') : false;
                     
@@ -352,6 +375,7 @@
                     id: Date.now().toString(),
                     name: name,
                     canvaLink: '',
+                    createdAt: this.getTimestamp(),
                     platforms: {}
                 };
                 
@@ -375,6 +399,7 @@
                     this.saveDatabase();
                     if(field === 'name') this.renderPrepView(); 
                 }
+                this.renderPrepLogTable(); // Update logs dynamically if link changes
             },
 
             toggleSetPlatform(platformId) {
@@ -386,7 +411,6 @@
                 }
             },
 
-            // Clean or Reset the Active Set
             resetActiveSet() {
                 if (!this.activeSetId) return;
                 if (confirm("Reset this Creative Set? This will clear the link and mark all platforms as Pending.")) {
@@ -447,6 +471,38 @@
                     `;
                     grid.appendChild(card);
                 });
+
+                this.renderPrepLogTable();
+            },
+
+            renderPrepLogTable() {
+                const logBody = document.getElementById('prep-log-body');
+                logBody.innerHTML = '';
+
+                this.data.creativeSets.forEach(set => {
+                    const getStatusBadge = (platformId) => {
+                        const status = set.platforms[platformId];
+                        if (status === 'ready') return `<span style="color: var(--status-active-txt); font-weight: 500;">Ready</span>`;
+                        return `<span style="color: var(--status-paused-txt); font-weight: 500;">Pending</span>`;
+                    };
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="font-mono text-muted" style="padding-left: 16px;">${set.createdAt || '-'}</td>
+                        <td style="font-weight: 500;">${set.name}</td>
+                        <td>
+                            ${set.canvaLink ? `<a href="${set.canvaLink}" target="_blank" style="color: var(--accent); text-decoration: none; display: flex; align-items: center; gap: 4px;">Link <i data-lucide="external-link" style="width:12px;height:12px;"></i></a>` : '<span class="text-muted">-</span>'}
+                        </td>
+                        <td class="text-center">${getStatusBadge('Meta UK')}</td>
+                        <td class="text-center">${getStatusBadge('Meta Ireland')}</td>
+                        <td class="text-center">${getStatusBadge('Pinterest UK')}</td>
+                        <td class="text-center">${getStatusBadge('Pinterest Ireland')}</td>
+                        <td class="text-center">${getStatusBadge('TikTok UK')}</td>
+                        <td class="text-center">${getStatusBadge('TikTok Ireland')}</td>
+                    `;
+                    logBody.appendChild(tr);
+                });
+                lucide.createIcons();
             },
 
             // ==========================================
@@ -521,6 +577,15 @@
             duplicateRow(id) {
                 const row = this.data.ads.find(a => a.id === id);
                 if(row) this.addRow(row);
+            },
+
+            deleteRow(id) {
+                if(confirm("Are you sure you want to delete this ad row?")) {
+                    this.data.ads = this.data.ads.filter(a => a.id !== id);
+                    this.saveDatabase();
+                    this.renderGrid();
+                    this.showToast("Row deleted");
+                }
             },
 
             async updateField(id, field, value) {
@@ -640,48 +705,6 @@
                 } catch (err) { alert("Error saving file. Check permissions."); }
             },
 
-            // ROW-LEVEL FILE HANDLING
-            setupRowDropzones() {
-                const dropzones = document.querySelectorAll('.file-dropzone');
-                dropzones.forEach(zone => {
-                    zone.addEventListener('click', (e) => {
-                        if(e.target.closest('.file-pill')) return; 
-                        this.activeUploadRow = zone.dataset.id;
-                        document.getElementById('row-file-upload').click();
-                    });
-
-                    zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('dragover'); });
-                    zone.addEventListener('dragleave', () => { zone.classList.remove('dragover'); });
-                    zone.addEventListener('drop', async (e) => {
-                        e.preventDefault();
-                        zone.classList.remove('dragover');
-                        const file = e.dataTransfer.files[0];
-                        if(file) await this.processRowFileSave(zone.dataset.id, file);
-                    });
-                });
-            },
-
-            async processRowFileSave(rowId, file) {
-                const row = this.data.ads.find(a => a.id === rowId);
-                const platformDef = this.platforms.find(p => p.id === row.platform);
-                const isVideo = file.type.startsWith('video/');
-                
-                row.type = isVideo ? 'Video' : 'Single';
-                row.materialFile = file.name;
-                
-                try {
-                    const folderHandle = await this.getDirHandleByPath(platformDef.folder, true);
-                    const fileHandle = await folderHandle.getFileHandle(file.name, { create: true });
-                    const writable = await fileHandle.createWritable();
-                    await writable.write(file);
-                    await writable.close();
-                    
-                    this.showToast(`Saved to ${platformDef.folder}`);
-                    await this.saveDatabase();
-                    this.renderGrid();
-                } catch (err) { alert("Error saving file. Check permissions."); }
-            },
-
             async getDirHandleByPath(path, create = false) {
                 let handle = this.dirHandle;
                 const parts = path.split('/').filter(p => p.trim() !== '');
@@ -710,7 +733,7 @@
                 this.showToast("Copied to clipboard!");
             },
 
-            // 6. Render Smart Grid
+            // 6. Render Smart Grid (Cleaned up columns)
             renderGrid() {
                 const tbody = document.getElementById('grid-body');
                 tbody.innerHTML = '';
@@ -729,24 +752,6 @@
                     const statusClass = row.status === 'active' ? 'status-active' : row.status === 'paused' ? 'status-paused' : 'status-draft';
                     
                     const daysDisplay = this.calculateDays(row.status, row.startDate, row.endDate);
-
-                    let materialHtml = `
-                        <div class="file-dropzone" data-id="${row.id}">
-                            <span style="color:var(--text-muted); font-size:12px; display:flex; align-items:center; gap:6px;">
-                                <i data-lucide="upload-cloud" style="width:14px;height:14px;"></i> Drop or Click
-                            </span>
-                        </div>`;
-                        
-                    if (row.materialFile) {
-                        materialHtml = `
-                            <div class="file-dropzone" data-id="${row.id}" title="${row.materialFile}">
-                                <div class="file-pill" onclick="app.copyToClipboard('${row.materialFile}')" style="cursor:copy;">
-                                    <i data-lucide="${row.type==='Video' ? 'video' : 'image'}" style="width:12px;height:12px; color:var(--accent);"></i>
-                                    ${row.materialFile}
-                                </div>
-                            </div>
-                        `;
-                    }
 
                     tr.innerHTML = `
                         <td class="text-center font-mono text-muted">${this.data.ads.length - index}</td>
@@ -772,25 +777,20 @@
                         <td><input type="date" class="cell-input font-mono text-muted" value="${row.startDate}" onchange="app.updateField('${row.id}', 'startDate', this.value)"></td>
                         <td><input type="date" class="cell-input font-mono text-muted" value="${row.endDate}" onchange="app.updateField('${row.id}', 'endDate', this.value)"></td>
                         <td class="text-center font-mono" style="${daysDisplay === 'Need End Date' ? 'color:var(--status-paused-txt); font-size:10px;' : 'color:var(--text-main);'}">${daysDisplay}</td>
-                        <td title="${row.utm}">
-                            <div class="cell-content font-mono" style="cursor:copy; color:var(--text-muted); font-size:11px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" onclick="app.copyToClipboard('${row.utm}')">
-                                ${row.utm}
-                            </div>
-                        </td>
                         <td><input type="number" class="cell-input font-mono text-right" value="${row.purchases}" onchange="app.updateField('${row.id}', 'purchases', parseInt(this.value)||0)"></td>
                         <td><input type="number" step="0.01" class="cell-input font-mono text-right" value="${row.roas}" onchange="app.updateField('${row.id}', 'roas', parseFloat(this.value)||0.00)"></td>
-                        <td class="text-center">
+                        <td class="text-center" style="display:flex; justify-content:center; align-items:center; gap:4px; height:100%;">
                             <button class="btn btn-secondary" style="padding:6px; border:none;" onclick="app.duplicateRow('${row.id}')" title="Duplicate Row"><i data-lucide="copy" style="width:14px;height:14px;"></i></button>
+                            <button class="btn btn-secondary" style="padding:6px; border:none; color:var(--status-paused-txt);" onclick="app.deleteRow('${row.id}')" title="Delete Row"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>
                         </td>
                     `;
                     tbody.appendChild(tr);
                 });
 
                 lucide.createIcons();
-                this.setupRowDropzones();
             },
 
-            // 7. Export
+            // 7. Export (Keeping the background data intact)
             exportCsv() {
                 let csv = "Ad Name,Platform,Type,Landing Page URL,Status,Start Date,End Date,Days Served,Material File,UTM,Purchases,ROAS\n";
                 this.data.ads.forEach(row => {
@@ -807,16 +807,7 @@
             }
         };
 
-        // Input for Click-to-Upload
-        document.getElementById('row-file-upload').addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (file && app.activeUploadRow) {
-                await app.processRowFileSave(app.activeUploadRow, file);
-                app.activeUploadRow = null;
-            }
-            e.target.value = ''; 
-        });
-
+        // Input for Click-to-Upload Global Zone
         document.getElementById('top-file-upload').addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (file && app.activeGlobalPlatform) {
