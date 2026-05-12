@@ -34,7 +34,7 @@
         body { font-family: 'Inter', sans-serif; background: var(--bg-base); color: var(--text-main); height: 100vh; overflow: hidden; display: flex; flex-direction: column;}
         
         /* Topbar */
-        .topbar { height: 64px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; background: var(--surface); flex-shrink: 0;}
+        .topbar { height: 64px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; background: var(--surface); flex-shrink: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 20;}
         .brand { font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px; color: var(--accent); }
         
         /* Buttons */
@@ -43,6 +43,13 @@
         .btn-primary:hover { background: var(--accent-hover); }
         .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
         .btn-secondary:hover { background: var(--surface-hover); }
+
+        /* Global Rapid Dropzones */
+        .global-dropzones { display: flex; gap: 16px; padding: 24px; background: var(--bg-base); overflow-x: auto; flex-shrink: 0;}
+        .global-zone { flex: 1; min-width: 160px; height: 90px; border: 2px dashed var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; cursor: pointer; transition: 0.2s; background: var(--surface); color: var(--text-muted); }
+        .global-zone:hover, .global-zone.dragover { border-color: var(--accent); background: rgba(70, 167, 88, 0.1); color: var(--text-main); }
+        .global-zone-title { font-weight: 600; font-size: 14px; color: var(--text-main); pointer-events: none;}
+        .global-zone-subtitle { font-size: 12px; pointer-events: none; display: flex; align-items: center; gap: 6px;}
 
         /* Workspace & DataGrid */
         .workspace { flex: 1; overflow: auto; padding: 0; position: relative; background: var(--bg-base);}
@@ -68,7 +75,7 @@
         .status-active { color: var(--status-active-txt); background: var(--status-active-bg); }
         .status-paused { color: var(--status-paused-txt); background: var(--status-paused-bg); }
 
-        /* File Dropzone */
+        /* Row Level File Dropzone */
         .file-dropzone { width: 100%; height: 100%; display: flex; align-items: center; justify-content: flex-start; padding: 0 16px; gap: 8px; cursor: pointer; transition: 0.2s; border: 2px dashed transparent;}
         .file-dropzone.dragover { border-color: var(--accent); background: rgba(70, 167, 88, 0.1); }
         .file-pill { display: inline-flex; align-items: center; gap: 6px; background: var(--surface); border: 1px solid var(--border); padding: 6px 10px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px;}
@@ -87,8 +94,9 @@
 </head>
 <body>
 
-    <!-- Hidden Global File Input for Click-to-Upload -->
-    <input type="file" id="global-file-upload" class="hidden" accept="image/*,video/*">
+    <!-- Hidden Global File Inputs -->
+    <input type="file" id="row-file-upload" class="hidden" accept="image/*,video/*">
+    <input type="file" id="top-file-upload" class="hidden" accept="image/*,video/*">
 
     <!-- Connection Screen -->
     <div id="connect-screen">
@@ -111,9 +119,14 @@
                 Drive Connected: <span id="drive-name" style="color:var(--text-main);">None</span>
             </div>
             <button class="btn btn-secondary" onclick="app.exportCsv()"><i data-lucide="download"></i> Export CSV</button>
-            <button class="btn btn-primary" onclick="app.addRow()"><i data-lucide="plus"></i> New Row</button>
+            <button class="btn btn-primary" onclick="app.addRow()"><i data-lucide="plus"></i> New Empty Row</button>
         </div>
     </header>
+
+    <!-- Rapid Ingestion Dropzones -->
+    <div class="global-dropzones" id="global-dropzones">
+        <!-- Rendered via JS -->
+    </div>
 
     <!-- DataGrid Workspace -->
     <main class="workspace">
@@ -146,15 +159,16 @@
         lucide.createIcons();
 
         // ----------------------------------------------------
-        // GLOBAL DRAG PREVENTION (Forces drop onto cells only)
+        // GLOBAL DRAG PREVENTION (Forces drop onto zones only)
         // ----------------------------------------------------
         window.addEventListener("dragover", function(e) { e.preventDefault(); }, false);
         window.addEventListener("drop", function(e) { e.preventDefault(); }, false);
 
         const app = {
             dirHandle: null,
-            data: { ads: [], counter: 1 },
+            data: { ads: [] },
             activeUploadRow: null,
+            activeGlobalPlatform: null,
             platforms: [
                 { id: 'Meta UK', folder: '03_Meta UK' },
                 { id: 'Meta Ireland', folder: '03_Meta Ireland' },
@@ -180,6 +194,7 @@
                     
                     await this.syncFolders();
                     await this.loadDatabase();
+                    this.renderGlobalDropzones();
                     this.renderGrid();
                 } catch (err) { console.error(err); }
             },
@@ -212,10 +227,28 @@
                 } catch (e) { console.warn("Save failed", e); }
             },
 
-            // 2. Data Logic & Smart Calculations
-            generateName() {
-                const num = String(this.data.counter++).padStart(3, '0');
-                return `ASC_AD_${num}`;
+            // 2. Data Logic & Smart Calculations (NAMING ENGINE)
+            getPlatformPrefix(platform) {
+                if (platform.includes('Meta')) return 'ASC_AD_';
+                if (platform.includes('Pinterest')) return 'PIN_AD_';
+                if (platform.includes('TikTok')) return 'TIK_AD_';
+                return 'GEN_AD_';
+            },
+
+            generateName(platform) {
+                const prefix = this.getPlatformPrefix(platform);
+                let maxNum = 0;
+                
+                this.data.ads.forEach(ad => {
+                    if (ad.name.startsWith(prefix)) {
+                        const numPart = ad.name.replace(prefix, '');
+                        const num = parseInt(numPart, 10);
+                        if (!isNaN(num) && num > maxNum) {
+                            maxNum = num;
+                        }
+                    }
+                });
+                return prefix + String(maxNum + 1).padStart(3, '0');
             },
 
             generateUtm(name, platform) {
@@ -223,7 +256,6 @@
                 return `utm_source=${source}&utm_medium=cpc&utm_campaign=${name}`;
             },
 
-            // SMART EXCEL MATH: =IF(F2="Active", TODAY()-G2+1, IF(H2<>"", H2-G2+1, "Enter End Date"))
             calculateDays(status, startStr, endStr) {
                 if (!startStr || !status || status === 'draft') return "";
                 
@@ -242,7 +274,6 @@
                     return "";
                 }
 
-                // Math: diff in ms / ms_per_day + 1
                 const diffTime = end - start;
                 const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
                 return diffDays;
@@ -254,18 +285,20 @@
 
             // 3. Grid Operations
             addRow(duplicateFrom = null) {
-                const name = this.generateName();
+                const targetPlatform = duplicateFrom ? duplicateFrom.platform : 'Meta UK';
+                const name = this.generateName(targetPlatform);
+                
                 const newRow = {
                     id: Date.now().toString(),
                     name: name,
-                    platform: duplicateFrom ? duplicateFrom.platform : 'Meta UK',
+                    platform: targetPlatform,
                     type: duplicateFrom ? duplicateFrom.type : 'Single',
                     url: duplicateFrom ? duplicateFrom.url : 'https://www.bedworld.net/',
                     status: 'draft',
                     startDate: '',
                     endDate: '',
                     materialFile: '',
-                    utm: this.generateUtm(name, duplicateFrom ? duplicateFrom.platform : 'Meta UK'),
+                    utm: this.generateUtm(name, targetPlatform),
                     purchases: duplicateFrom ? duplicateFrom.purchases : 0,
                     roas: duplicateFrom ? duplicateFrom.roas : 0.00
                 };
@@ -284,12 +317,23 @@
                 const row = this.data.ads.find(a => a.id === id);
                 if (!row) return;
 
-                // Regenerate UTM if Name/Platform changes
-                if (field === 'name' || field === 'platform') {
-                    row[field] = value;
+                if (field === 'name') {
+                    const isDuplicate = this.data.ads.some(a => a.id !== id && a.name.toLowerCase() === value.trim().toLowerCase());
+                    if (isDuplicate) {
+                        const suggestedName = this.generateName(row.platform);
+                        alert(`Ad name "${value}" is already used!\n\nBased on your past creations, the next available name for this platform is: ${suggestedName}\n\nAuto-applying the suggested name.`);
+                        row.name = suggestedName;
+                    } else {
+                        row.name = value.trim();
+                    }
                     row.utm = this.generateUtm(row.name, row.platform);
+                }
+                else if (field === 'platform') {
+                    row.platform = value;
+                    row.name = this.generateName(value); 
+                    row.utm = this.generateUtm(row.name, row.platform);
+                    this.showToast(`Platform changed. Ad auto-renamed to ${row.name}`);
                 } 
-                // Status automation triggers
                 else if (field === 'status') {
                     const oldStatus = row.status;
                     row.status = value;
@@ -302,13 +346,12 @@
                     else if (value === 'paused' && oldStatus !== 'paused') {
                         if(!row.endDate) row.endDate = this.getTodayDate(); 
                         
-                        // Physically move file to Paused folder
                         if (row.materialFile) {
                             const platformDef = this.platforms.find(p => p.id === row.platform);
                             const oldPath = platformDef.folder;
                             const newPath = `${platformDef.folder}/Paused`;
                             await this.movePhysicalFile(oldPath, newPath, row.materialFile);
-                            this.showToast(`Ad Paused. File moved to ${newPath}`);
+                            this.showToast(`Ad Paused. File auto-moved to ${newPath}`);
                         }
                     }
                 } 
@@ -317,45 +360,110 @@
                 }
 
                 await this.saveDatabase();
-                this.renderGrid(); // Immediately re-render to update days math
+                this.renderGrid(); 
             },
 
-            // 4. Physical File Handling (Drag/Drop & Click)
-            setupFileInteractions() {
-                const dropzones = document.querySelectorAll('.file-dropzone');
+            // 4. TOP-LEVEL GLOBAL DROPZONES (RAPID INGESTION)
+            renderGlobalDropzones() {
+                const container = document.getElementById('global-dropzones');
+                container.innerHTML = '';
                 
-                dropzones.forEach(zone => {
-                    // Click to Upload Trigger
-                    zone.addEventListener('click', (e) => {
-                        if(e.target.closest('.file-pill')) return; // Ignore if clicking an existing pill
-                        this.activeUploadRow = zone.dataset.id;
-                        document.getElementById('global-file-upload').click();
+                this.platforms.forEach(p => {
+                    const zone = document.createElement('div');
+                    zone.className = 'global-zone';
+                    zone.innerHTML = `
+                        <div class="global-zone-title">${p.id}</div>
+                        <div class="global-zone-subtitle"><i data-lucide="download-cloud" style="width:14px;height:14px;"></i> Drop file here</div>
+                    `;
+                    
+                    // Click trigger
+                    zone.addEventListener('click', () => {
+                        this.activeGlobalPlatform = p.id;
+                        document.getElementById('top-file-upload').click();
                     });
 
-                    // Drag & Drop Triggers
-                    zone.addEventListener('dragover', (e) => {
-                        e.preventDefault();
-                        zone.classList.add('dragover');
-                    });
-                    zone.addEventListener('dragleave', () => {
-                        zone.classList.remove('dragover');
-                    });
+                    // Drag and Drop triggers
+                    zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('dragover'); });
+                    zone.addEventListener('dragleave', () => { zone.classList.remove('dragover'); });
                     zone.addEventListener('drop', async (e) => {
                         e.preventDefault();
                         zone.classList.remove('dragover');
                         const file = e.dataTransfer.files[0];
-                        if(file) await this.processFileSave(zone.dataset.id, file);
+                        if(file) await this.processGlobalFileSave(p.id, file);
+                    });
+
+                    container.appendChild(zone);
+                });
+                lucide.createIcons();
+            },
+
+            async processGlobalFileSave(platformId, file) {
+                if(!this.dirHandle) return alert("Please connect Workspace Folder first.");
+                
+                const platformDef = this.platforms.find(p => p.id === platformId);
+                const isVideo = file.type.startsWith('video/');
+                const type = isVideo ? 'Video' : 'Single';
+                const name = this.generateName(platformId);
+                
+                try {
+                    // 1. Physically save file
+                    const folderHandle = await this.getDirHandleByPath(platformDef.folder, true);
+                    const fileHandle = await folderHandle.getFileHandle(file.name, { create: true });
+                    const writable = await fileHandle.createWritable();
+                    await writable.write(file);
+                    await writable.close();
+                    
+                    // 2. Create new row
+                    const newRow = {
+                        id: Date.now().toString(),
+                        name: name,
+                        platform: platformId,
+                        type: type,
+                        url: 'https://www.bedworld.net/',
+                        status: 'draft',
+                        startDate: '',
+                        endDate: '',
+                        materialFile: file.name,
+                        utm: this.generateUtm(name, platformId),
+                        purchases: 0,
+                        roas: 0.00
+                    };
+                    
+                    this.data.ads.unshift(newRow);
+                    await this.saveDatabase();
+                    this.renderGrid();
+                    this.showToast(`Saved ${file.name} to ${platformDef.folder} & Row created!`);
+                } catch (err) {
+                    alert("Error saving file. Check permissions.");
+                }
+            },
+
+            // 5. ROW-LEVEL FILE HANDLING
+            setupRowDropzones() {
+                const dropzones = document.querySelectorAll('.file-dropzone');
+                dropzones.forEach(zone => {
+                    zone.addEventListener('click', (e) => {
+                        if(e.target.closest('.file-pill')) return; 
+                        this.activeUploadRow = zone.dataset.id;
+                        document.getElementById('row-file-upload').click();
+                    });
+
+                    zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('dragover'); });
+                    zone.addEventListener('dragleave', () => { zone.classList.remove('dragover'); });
+                    zone.addEventListener('drop', async (e) => {
+                        e.preventDefault();
+                        zone.classList.remove('dragover');
+                        const file = e.dataTransfer.files[0];
+                        if(file) await this.processRowFileSave(zone.dataset.id, file);
                     });
                 });
             },
 
-            // The actual file writer engine
-            async processFileSave(rowId, file) {
+            async processRowFileSave(rowId, file) {
                 const row = this.data.ads.find(a => a.id === rowId);
                 const platformDef = this.platforms.find(p => p.id === row.platform);
-                
-                // Smart Detect Type
                 const isVideo = file.type.startsWith('video/');
+                
                 row.type = isVideo ? 'Video' : 'Single';
                 row.materialFile = file.name;
                 
@@ -394,7 +502,7 @@
                     await writable.close();
 
                     await oldFolderHandle.removeEntry(fileName);
-                } catch(e) { console.warn("Could not physically move file.", e); }
+                } catch(e) { console.warn("Could not move file physically.", e); }
             },
 
             copyToClipboard(text) {
@@ -402,7 +510,7 @@
                 this.showToast("Copied to clipboard!");
             },
 
-            // 5. Render Smart Grid
+            // 6. Render Smart Grid
             renderGrid() {
                 const tbody = document.getElementById('grid-body');
                 tbody.innerHTML = '';
@@ -410,24 +518,11 @@
                 this.data.ads.forEach((row, index) => {
                     const tr = document.createElement('tr');
                     
-                    // Platform Options
-                    const platformOptions = this.platforms.map(p => 
-                        `<option value="${p.id}" ${row.platform === p.id ? 'selected' : ''}>${p.id}</option>`
-                    ).join('');
-
-                    // Type Options
-                    const typeOptions = ['Single', 'Video', 'Carousel'].map(t => 
-                        `<option value="${t}" ${row.type === t ? 'selected' : ''}>${t}</option>`
-                    ).join('');
-
-                    // Status Colors
+                    const platformOptions = this.platforms.map(p => `<option value="${p.id}" ${row.platform === p.id ? 'selected' : ''}>${p.id}</option>`).join('');
+                    const typeOptions = ['Single', 'Video', 'Carousel'].map(t => `<option value="${t}" ${row.type === t ? 'selected' : ''}>${t}</option>`).join('');
                     const statusClass = row.status === 'active' ? 'status-active' : row.status === 'paused' ? 'status-paused' : 'status-draft';
-                    const statusText = row.status.charAt(0).toUpperCase() + row.status.slice(1);
-                    
-                    // Mathematical Days Calculation
                     const daysDisplay = this.calculateDays(row.status, row.startDate, row.endDate);
 
-                    // Material Display
                     let materialHtml = `
                         <div class="file-dropzone" data-id="${row.id}">
                             <span style="color:var(--text-muted); font-size:12px; display:flex; align-items:center; gap:6px;">
@@ -449,16 +544,8 @@
                     tr.innerHTML = `
                         <td class="text-center font-mono text-muted">${this.data.ads.length - index}</td>
                         <td><input type="text" class="cell-input font-mono" value="${row.name}" onchange="app.updateField('${row.id}', 'name', this.value)"></td>
-                        <td>
-                            <select class="cell-input" onchange="app.updateField('${row.id}', 'platform', this.value)">
-                                ${platformOptions}
-                            </select>
-                        </td>
-                        <td>
-                            <select class="cell-input" onchange="app.updateField('${row.id}', 'type', this.value)">
-                                ${typeOptions}
-                            </select>
-                        </td>
+                        <td><select class="cell-input" onchange="app.updateField('${row.id}', 'platform', this.value)">${platformOptions}</select></td>
+                        <td><select class="cell-input" onchange="app.updateField('${row.id}', 'type', this.value)">${typeOptions}</select></td>
                         <td><input type="text" class="cell-input" value="${row.url}" placeholder="https://..." onchange="app.updateField('${row.id}', 'url', this.value)"></td>
                         <td class="status-cell">
                             <select class="status-select ${statusClass}" onchange="app.updateField('${row.id}', 'status', this.value)">
@@ -486,10 +573,10 @@
                 });
 
                 lucide.createIcons();
-                this.setupFileInteractions();
+                this.setupRowDropzones();
             },
 
-            // 6. Export
+            // 7. Export
             exportCsv() {
                 let csv = "Ad Name,Platform,Type,Landing Page URL,Status,Start Date,End Date,Days Served,Material File,UTM,Purchases,ROAS\n";
                 this.data.ads.forEach(row => {
@@ -506,14 +593,23 @@
             }
         };
 
-        // Attach listener for Click-to-Upload Global Input
-        document.getElementById('global-file-upload').addEventListener('change', async (e) => {
+        // Attach listeners for Click-to-Upload Hidden Inputs
+        document.getElementById('row-file-upload').addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (file && app.activeUploadRow) {
-                await app.processFileSave(app.activeUploadRow, file);
+                await app.processRowFileSave(app.activeUploadRow, file);
                 app.activeUploadRow = null;
             }
-            e.target.value = ''; // Reset input
+            e.target.value = ''; 
+        });
+
+        document.getElementById('top-file-upload').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file && app.activeGlobalPlatform) {
+                await app.processGlobalFileSave(app.activeGlobalPlatform, file);
+                app.activeGlobalPlatform = null;
+            }
+            e.target.value = ''; 
         });
 
     </script>
