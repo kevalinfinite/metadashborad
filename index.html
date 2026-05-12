@@ -9,158 +9,98 @@
     
     <style>
         :root {
-            /* Ultra-Premium Dark Theme */
-            --bg-base: #111111;
-            --surface: #1C1C1C;
-            --surface-hover: #2A2A2A;
+            /* Airtable-style Dark Theme Colors */
+            --bg-base: #141414;
+            --surface: #1E1E1E;
+            --surface-hover: #2D2D2D;
             --border: #333333;
-            --text-main: #EEEEEE;
+            --text-main: #E0E0E0;
             --text-muted: #888888;
-            --accent: #4CAF50; 
-            --accent-hover: #45A049;
+            --accent: #46A758; 
+            --accent-hover: #3E944E;
             
             /* Status Colors */
-            --status-active-bg: rgba(76, 175, 80, 0.15);
-            --status-active-txt: #66BB6A;
-            --status-paused-bg: rgba(244, 67, 54, 0.15);
-            --status-paused-txt: #EF5350;
-            --status-draft-bg: rgba(255, 255, 255, 0.08);
-            --status-draft-txt: #B0B0B0;
+            --status-active-bg: rgba(70, 167, 88, 0.2);
+            --status-active-txt: #4ADE80;
+            --status-paused-bg: rgba(220, 38, 38, 0.2);
+            --status-paused-txt: #F87171;
+            --status-draft-bg: rgba(255, 255, 255, 0.1);
+            --status-draft-txt: #A1A1AA;
             
-            --radius-sm: 4px;
-            --radius-md: 8px;
-            --radius-lg: 12px;
+            --radius: 6px;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-base); color: var(--text-main); height: 100vh; overflow: hidden; display: flex; flex-direction: column;}
         
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background: var(--bg-base); 
-            color: var(--text-main); 
-            height: 100vh; 
-            overflow: hidden; 
-            display: flex; 
-            flex-direction: column;
-        }
-
-        /* Custom Scrollbars */
-        ::-webkit-scrollbar { width: 10px; height: 10px; }
-        ::-webkit-scrollbar-track { background: var(--bg-base); }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 5px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
-
-        /* --- Topbar --- */
-        .topbar { 
-            height: 64px; 
-            border-bottom: 1px solid var(--border); 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            padding: 0 24px; 
-            background: var(--surface); 
-            flex-shrink: 0; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2); 
-            z-index: 20;
-        }
-        .brand { font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px; color: var(--accent); letter-spacing: -0.3px;}
+        /* Topbar */
+        .topbar { height: 64px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; background: var(--surface); flex-shrink: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 20;}
+        .brand { font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px; color: var(--accent); }
+        .nav-tabs { display: flex; gap: 8px; margin-left: 32px; border-left: 1px solid var(--border); padding-left: 32px;}
+        .nav-tab { padding: 8px 16px; border-radius: var(--radius); cursor: pointer; font-size: 14px; font-weight: 500; color: var(--text-muted); transition: 0.2s;}
+        .nav-tab.active { background: rgba(70, 167, 88, 0.1); color: var(--accent); }
+        .nav-tab:hover:not(.active) { background: var(--surface-hover); color: var(--text-main);}
         
         /* Buttons */
-        .btn { padding: 8px 16px; border-radius: var(--radius-sm); border: none; font-size: 13px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; font-family: 'Inter', sans-serif;}
+        .btn { padding: 6px 14px; border-radius: var(--radius); border: none; font-size: 13px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s;}
         .btn-primary { background: var(--accent); color: #fff; }
         .btn-primary:hover { background: var(--accent-hover); }
         .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
-        .btn-secondary:hover { background: var(--surface-hover); border-color: var(--text-muted);}
+        .btn-secondary:hover { background: var(--surface-hover); }
 
-        /* --- Global Dropzones (Responsive Grid) --- */
-        .global-dropzones-wrapper {
-            padding: 24px;
-            background: var(--bg-base);
-            border-bottom: 1px solid var(--border);
-            flex-shrink: 0;
-            z-index: 10;
-        }
-        .global-dropzones { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-            gap: 16px; 
-            width: 100%;
-        }
-        .global-zone { 
-            height: 84px; 
-            border: 2px dashed var(--border); 
-            border-radius: var(--radius-md); 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 6px; 
-            cursor: pointer; 
-            transition: all 0.2s ease; 
-            background: var(--surface); 
-            color: var(--text-muted); 
-        }
-        .global-zone:hover, .global-zone.dragover { 
-            border-color: var(--accent); 
-            background: rgba(76, 175, 80, 0.05); 
-            color: var(--text-main); 
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-        }
+        /* VIEWS */
+        .view-container { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        .hidden { display: none !important; }
+
+        /* =========================================
+           VIEW 1: SET PREPARATION (NEW DASHBOARD)
+           ========================================= */
+        #view-prep { overflow-y: auto; padding: 40px; background: var(--bg-base); display: flex; flex-direction: column; align-items: center; }
+        
+        .prep-header-controls { width: 100%; max-width: 900px; display: flex; justify-content: space-between; margin-bottom: 24px; align-items: center;}
+        .prep-select { background: var(--surface); border: 1px solid var(--border); color: var(--text-main); padding: 8px 16px; border-radius: var(--radius); font-size: 14px; outline: none; min-width: 300px;}
+        
+        .prep-central-box { width: 100%; max-width: 900px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 32px; display: flex; flex-direction: column; gap: 16px; align-items: center; text-align: center; margin-bottom: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);}
+        .prep-set-name { background: transparent; border: none; color: var(--text-main); font-size: 24px; font-weight: 600; text-align: center; width: 100%; outline: none; border-bottom: 1px dashed transparent; transition: 0.2s;}
+        .prep-set-name:focus { border-bottom-color: var(--accent); }
+        .prep-canva-link { width: 100%; max-width: 600px; background: var(--bg-base); border: 1px solid var(--border); padding: 12px 16px; border-radius: 8px; color: var(--text-main); font-size: 14px; outline: none; text-align: center; transition: 0.2s;}
+        .prep-canva-link:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(70, 167, 88, 0.2);}
+        
+        .prep-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; width: 100%; max-width: 900px; }
+        .prep-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px; transition: 0.2s;}
+        .prep-card:hover { border-color: var(--text-muted); }
+        .prep-card-title { font-size: 16px; font-weight: 600; color: var(--text-main); }
+        .prep-card-dim { font-size: 12px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; margin-top: 4px; display: block;}
+        
+        .status-toggle { width: 100%; padding: 12px; border-radius: 8px; border: none; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .toggle-pending { background: rgba(220, 38, 38, 0.1); color: var(--status-paused-txt); border: 1px solid rgba(220, 38, 38, 0.3); }
+        .toggle-pending:hover { background: rgba(220, 38, 38, 0.2); }
+        .toggle-ready { background: rgba(70, 167, 88, 0.1); color: var(--status-active-txt); border: 1px solid rgba(70, 167, 88, 0.3); }
+        .toggle-ready:hover { background: rgba(70, 167, 88, 0.2); }
+
+
+        /* =========================================
+           VIEW 2: SMART TRACKER (EXISTING)
+           ========================================= */
+        /* Global Rapid Dropzones */
+        .global-dropzones { display: flex; gap: 16px; padding: 24px; background: var(--bg-base); overflow-x: auto; flex-shrink: 0;}
+        .global-zone { flex: 1; min-width: 160px; height: 90px; border: 2px dashed var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; cursor: pointer; transition: 0.2s; background: var(--surface); color: var(--text-muted); }
+        .global-zone:hover:not(.locked), .global-zone.dragover:not(.locked) { border-color: var(--accent); background: rgba(70, 167, 88, 0.1); color: var(--text-main); }
+        .global-zone.locked { opacity: 0.4; cursor: not-allowed; border-color: rgba(220, 38, 38, 0.3); background: rgba(220, 38, 38, 0.05); }
         .global-zone-title { font-weight: 600; font-size: 14px; color: var(--text-main); pointer-events: none;}
-        .global-zone-subtitle { font-size: 11px; pointer-events: none; display: flex; align-items: center; gap: 6px; font-family: 'JetBrains Mono', monospace;}
+        .global-zone-subtitle { font-size: 12px; pointer-events: none; display: flex; align-items: center; gap: 6px;}
 
-        /* --- DataGrid Workspace --- */
+        /* DataGrid */
         .workspace { flex: 1; overflow: auto; padding: 0; position: relative; background: var(--bg-base);}
-        
-        .datagrid { width: 100%; border-collapse: separate; border-spacing: 0; text-align: left; min-width: 1700px;}
-        
-        .datagrid th { 
-            position: sticky; 
-            top: 0; 
-            background: var(--surface); 
-            z-index: 10; 
-            padding: 12px 16px; 
-            font-size: 11px; 
-            font-weight: 600; 
-            color: var(--text-muted); 
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-bottom: 1px solid var(--border); 
-            border-right: 1px solid var(--border); 
-            white-space: nowrap; 
-        }
-        .datagrid th::after {
-            content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 1px; background: var(--border);
-        }
-
-        .datagrid td { 
-            padding: 0; 
-            border-bottom: 1px solid var(--border); 
-            border-right: 1px solid var(--border); 
-            vertical-align: middle; 
-            height: 48px; 
-            background: transparent; 
-            transition: 0.1s;
-        }
+        .datagrid { width: 100%; border-collapse: collapse; text-align: left; min-width: 1500px;} /* adjusted width slightly */
+        .datagrid th { position: sticky; top: 0; background: var(--surface); z-index: 10; padding: 12px 16px; font-size: 12px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); white-space: nowrap; box-shadow: 0 1px 0 var(--border);}
+        .datagrid td { padding: 0; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); vertical-align: middle; height: 48px; background: transparent; transition: 0.1s;}
         .datagrid tr:hover td { background: var(--surface-hover); }
         
         /* Inputs & Cells */
-        .cell-content { width: 100%; height: 100%; padding: 0 16px; display: flex; align-items: center; font-size: 13px; color: var(--text-main); }
-        .cell-input { 
-            width: 100%; 
-            height: 100%; 
-            padding: 0 16px; 
-            background: transparent; 
-            border: none; 
-            color: var(--text-main); 
-            font-family: inherit; 
-            font-size: 13px; 
-            outline: none; 
-            display: flex;
-            align-items: center;
-        }
-        .cell-input:focus { background: rgba(76, 175, 80, 0.05); box-shadow: inset 0 0 0 2px var(--accent); }
+        .cell-content { width: 100%; height: 100%; padding: 8px 16px; display: flex; align-items: center; font-size: 13px; color: var(--text-main); }
+        .cell-input { width: 100%; height: 100%; padding: 8px 16px; background: transparent; border: none; color: var(--text-main); font-family: inherit; font-size: 13px; outline: none; }
+        .cell-input:focus { background: rgba(70, 167, 88, 0.05); box-shadow: inset 0 0 0 2px var(--accent); border-radius: 2px;}
         
         .font-mono { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
         .text-center { text-align: center; justify-content: center; }
@@ -168,39 +108,18 @@
         
         /* Dropdowns (Status Badges) */
         .status-cell { padding: 0 12px; }
-        .status-select { 
-            appearance: none; 
-            background: transparent; 
-            border: none; 
-            padding: 6px 12px; 
-            border-radius: 20px; 
-            font-size: 11px; 
-            font-weight: 600; 
-            cursor: pointer; 
-            outline: none; 
-            width: 100%; 
-            text-align: center; 
-            font-family: 'Inter', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .status-draft { color: var(--status-draft-txt); background: var(--status-draft-bg); border: 1px solid rgba(255,255,255,0.1); }
-        .status-active { color: var(--status-active-txt); background: var(--status-active-bg); border: 1px solid rgba(76, 175, 80, 0.3);}
-        .status-paused { color: var(--status-paused-txt); background: var(--status-paused-bg); border: 1px solid rgba(244, 67, 54, 0.3);}
+        .status-select { appearance: none; background: transparent; border: none; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; outline: none; width: 100%; text-align: center; font-family: 'Inter', sans-serif;}
+        .status-draft { color: var(--status-draft-txt); background: var(--status-draft-bg); }
+        .status-active { color: var(--status-active-txt); background: var(--status-active-bg); }
+        .status-paused { color: var(--status-paused-txt); background: var(--status-paused-bg); }
 
-        /* Row Dropzone */
-        .file-dropzone { width: 100%; height: 100%; display: flex; align-items: center; justify-content: flex-start; padding: 0 16px; gap: 8px; cursor: pointer; transition: 0.2s; border: 2px dashed transparent;}
-        .file-dropzone.dragover { border-color: var(--accent); background: rgba(76, 175, 80, 0.1); }
-        .file-pill { display: inline-flex; align-items: center; gap: 6px; background: var(--surface); border: 1px solid var(--border); padding: 6px 10px; border-radius: var(--radius-sm); font-family: 'JetBrains Mono', monospace; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px;}
-        .file-pill:hover { border-color: var(--accent); }
-
-        /* --- Overlays & Notifications --- */
+        /* Connect Screen */
         #connect-screen { position: fixed; inset: 0; background: var(--bg-base); z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
         
-        #toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--text-main); color: var(--bg-base); padding: 12px 24px; border-radius: var(--radius-md); font-weight: 600; font-size: 13px; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 300; display: flex; gap: 8px; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);}
+        /* Toast */
+        #toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--text-main); color: var(--bg-base); padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 13px; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 300; display: flex; gap: 8px; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);}
         #toast.show { transform: translateX(-50%) translateY(0); }
 
-        .hidden { display: none !important; }
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; opacity: 0.6;}
     </style>
 </head>
@@ -220,77 +139,110 @@
         </button>
     </div>
 
-    <!-- Toast Notification -->
+    <!-- Toast -->
     <div id="toast"><i data-lucide="check-circle" style="width:16px;height:16px; color:var(--accent);"></i> <span id="toast-msg">Action successful</span></div>
 
     <!-- Topbar -->
     <header class="topbar">
-        <div class="brand"><i data-lucide="layout-template"></i> BedWorld Smart Tracker</div>
-        <div style="display: flex; gap: 16px; align-items: center;">
-            <div style="font-size: 12px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace;">
+        <div style="display: flex; align-items: center;">
+            <div class="brand"><i data-lucide="layout-template"></i> BedWorld Hub</div>
+            <div class="nav-tabs">
+                <div class="nav-tab active" id="tab-prep" onclick="app.switchView('prep')">1. Master Preparation</div>
+                <div class="nav-tab" id="tab-tracker" onclick="app.switchView('tracker')">2. Smart Tracker</div>
+            </div>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <div style="font-size: 12px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; margin-right: 16px;">
                 Drive Connected: <span id="drive-name" style="color:var(--text-main);">None</span>
             </div>
-            <div style="width: 1px; height: 24px; background: var(--border);"></div>
             <button class="btn btn-secondary" onclick="app.exportCsv()"><i data-lucide="download"></i> Export CSV</button>
-            <button class="btn btn-primary" onclick="app.addRow()"><i data-lucide="plus"></i> New Row</button>
+            <button class="btn btn-primary" onclick="app.addRow()"><i data-lucide="plus"></i> New Empty Row</button>
         </div>
     </header>
 
-    <!-- Rapid Ingestion Dropzones -->
-    <div class="global-dropzones-wrapper">
+    <!-- =========================================
+         VIEW 1: SET PREPARATION (NEW DASHBOARD)
+         ========================================= -->
+    <div id="view-prep" class="view-container">
+        
+        <div class="prep-header-controls">
+            <h2 style="font-size: 20px; font-weight: 500;">Master Creative Setup</h2>
+            <div style="display: flex; gap: 12px;">
+                <select id="set-selector" class="prep-select" onchange="app.changeActiveSet(this.value)">
+                    <!-- Options injected -->
+                </select>
+                <button class="btn btn-secondary" onclick="app.createNewSet()"><i data-lucide="plus"></i> Create New Set</button>
+            </div>
+        </div>
+
+        <div class="prep-central-box">
+            <input type="text" id="set-name-input" class="prep-set-name" placeholder="E.g., Set1_1st week_May'26" onchange="app.updateActiveSet('name', this.value)">
+            <div style="font-size: 14px; color: var(--text-muted);">Creative Approved by Client</div>
+            <input type="text" id="set-link-input" class="prep-canva-link" placeholder="Paste Canva Link here (will be stored for future use)" onchange="app.updateActiveSet('canvaLink', this.value)">
+        </div>
+
+        <div class="prep-grid" id="prep-platform-grid">
+            <!-- Cards injected via JS -->
+        </div>
+        
+    </div>
+
+    <!-- =========================================
+         VIEW 2: SMART TRACKER (EXISTING)
+         ========================================= -->
+    <div id="view-tracker" class="view-container hidden">
+        <!-- Rapid Ingestion Dropzones -->
         <div class="global-dropzones" id="global-dropzones">
             <!-- Rendered via JS -->
         </div>
-    </div>
 
-    <!-- DataGrid Workspace -->
-    <main class="workspace">
-        <table class="datagrid">
-            <thead>
-                <tr>
-                    <th style="width: 50px; text-align: center;">#</th>
-                    <th style="width: 140px;">Ad Name</th>
-                    <th style="width: 140px;">Platform</th>
-                    <th style="width: 110px;">Type</th>
-                    <th style="width: 280px;">Landing Page URL</th>
-                    <th style="width: 120px; text-align: center;">Status</th>
-                    <th style="width: 140px;">Start Date</th>
-                    <th style="width: 140px;">End Date</th>
-                    <th style="width: 100px; text-align: center;">Days</th>
-                    <th style="width: 260px;">Material File (Drop/Click)</th>
-                    <th style="width: 220px;">UTM Tracker</th>
-                    <th style="width: 100px; text-align: right;">Purchases</th>
-                    <th style="width: 100px; text-align: right;">ROAS</th>
-                    <th style="width: 60px; text-align: center;">Act</th>
-                </tr>
-            </thead>
-            <tbody id="grid-body">
-                <!-- Rows injected here -->
-            </tbody>
-        </table>
-    </main>
+        <!-- DataGrid Workspace -->
+        <main class="workspace">
+            <table class="datagrid">
+                <thead>
+                    <tr>
+                        <th style="width: 50px; text-align: center;">#</th>
+                        <th style="width: 140px;">Ad Name</th>
+                        <th style="width: 140px;">Platform</th>
+                        <th style="width: 110px;">Type</th>
+                        <th style="width: 280px;">Landing Page URL</th>
+                        <th style="width: 120px; text-align: center;">Status</th>
+                        <th style="width: 140px;">Start Date</th>
+                        <th style="width: 140px;">End Date</th>
+                        <th style="width: 100px; text-align: center;">Days</th>
+                        <th style="width: 220px;">UTM Tracker</th>
+                        <th style="width: 100px; text-align: right;">Purchases</th>
+                        <th style="width: 100px; text-align: right;">ROAS</th>
+                        <th style="width: 80px; text-align: center;">Act</th>
+                    </tr>
+                </thead>
+                <tbody id="grid-body">
+                    <!-- Rows injected here -->
+                </tbody>
+            </table>
+        </main>
+    </div>
 
     <script>
         lucide.createIcons();
 
-        // ----------------------------------------------------
         // GLOBAL DRAG PREVENTION (Forces drop onto zones only)
-        // ----------------------------------------------------
         window.addEventListener("dragover", function(e) { e.preventDefault(); }, false);
         window.addEventListener("drop", function(e) { e.preventDefault(); }, false);
 
         const app = {
             dirHandle: null,
-            data: { ads: [] },
+            data: { ads: [], creativeSets: [] },
             activeUploadRow: null,
             activeGlobalPlatform: null,
+            activeSetId: null,
             platforms: [
-                { id: 'Meta UK', folder: '03_Meta UK' },
-                { id: 'Meta Ireland', folder: '03_Meta Ireland' },
-                { id: 'Pinterest UK', folder: '04_Pinterest UK' },
-                { id: 'Pinterest Ireland', folder: '04_Pinterest Ireland' },
-                { id: 'TikTok UK', folder: '05_TikTok UK' },
-                { id: 'TikTok Ireland', folder: '05_TikTok Ireland' }
+                { id: 'Meta UK', folder: '03_Meta UK', dim: '1080x1080' },
+                { id: 'Meta Ireland', folder: '03_Meta Ireland', dim: '1080x1080' },
+                { id: 'Pinterest UK', folder: '04_Pinterest UK', dim: '1000x1500' },
+                { id: 'Pinterest Ireland', folder: '04_Pinterest Ireland', dim: '1000x1500' },
+                { id: 'TikTok UK', folder: '05_TikTok UK', dim: '1080x1920' },
+                { id: 'TikTok Ireland', folder: '05_TikTok Ireland', dim: '1080x1920' }
             ],
 
             showToast(msg) {
@@ -309,6 +261,15 @@
                     
                     await this.syncFolders();
                     await this.loadDatabase();
+                    
+                    // Initialize Sets Engine
+                    if (this.data.creativeSets.length === 0) {
+                        this.createNewSet("Set1_1st week_May'26");
+                    } else {
+                        this.activeSetId = this.data.creativeSets[0].id;
+                        this.renderPrepView();
+                    }
+                    
                     this.renderGlobalDropzones();
                     this.renderGrid();
                 } catch (err) { console.error(err); }
@@ -329,7 +290,10 @@
                     const fileHandle = await this.dirHandle.getFileHandle('tracker_db.json', { create: true });
                     const file = await fileHandle.getFile();
                     const contents = await file.text();
-                    if (contents) this.data = JSON.parse(contents);
+                    if (contents) {
+                        this.data = JSON.parse(contents);
+                        if(!this.data.creativeSets) this.data.creativeSets = [];
+                    }
                 } catch (e) { console.log("New database created."); }
             },
 
@@ -342,7 +306,115 @@
                 } catch (e) { console.warn("Save failed", e); }
             },
 
-            // 2. Data Logic & Smart Calculations
+            // ==========================================
+            // PRE-FLIGHT DASHBOARD ENGINE (NEW)
+            // ==========================================
+            
+            // View Switcher with Gatekeeper Logic
+            switchView(viewName) {
+                if (viewName === 'tracker') {
+                    // GATEKEEPER CHECK: Is at least one platform ready in the active set?
+                    const activeSet = this.data.creativeSets.find(s => s.id === this.activeSetId);
+                    const isAnyReady = activeSet ? Object.values(activeSet.platforms).includes('ready') : false;
+                    
+                    if (!isAnyReady) {
+                        alert("ACCESS DENIED:\nYou must mark at least one platform as 'Ready to Use' before accessing the Smart Tracker dashboard.");
+                        return;
+                    }
+                    
+                    document.getElementById('view-prep').classList.add('hidden');
+                    document.getElementById('view-tracker').classList.remove('hidden');
+                    document.getElementById('tab-prep').classList.remove('active');
+                    document.getElementById('tab-tracker').classList.add('active');
+                    
+                    this.renderGlobalDropzones(); // Re-render to apply locks
+                } else {
+                    document.getElementById('view-tracker').classList.add('hidden');
+                    document.getElementById('view-prep').classList.remove('hidden');
+                    document.getElementById('tab-tracker').classList.remove('active');
+                    document.getElementById('tab-prep').classList.add('active');
+                }
+            },
+
+            createNewSet(defaultName = null) {
+                const name = defaultName || prompt("Enter name for the new Creative Set:", "E.g. Set2_2nd week_May'26");
+                if (!name) return;
+
+                const newSet = {
+                    id: Date.now().toString(),
+                    name: name,
+                    canvaLink: '',
+                    platforms: {}
+                };
+                
+                // Initialize all as pending
+                this.platforms.forEach(p => { newSet.platforms[p.id] = 'pending'; });
+                
+                this.data.creativeSets.unshift(newSet);
+                this.activeSetId = newSet.id;
+                this.saveDatabase();
+                this.renderPrepView();
+            },
+
+            changeActiveSet(id) {
+                this.activeSetId = id;
+                this.renderPrepView();
+            },
+
+            updateActiveSet(field, value) {
+                const set = this.data.creativeSets.find(s => s.id === this.activeSetId);
+                if (set) {
+                    set[field] = value;
+                    this.saveDatabase();
+                    if(field === 'name') this.renderPrepView(); 
+                }
+            },
+
+            toggleSetPlatform(platformId) {
+                const set = this.data.creativeSets.find(s => s.id === this.activeSetId);
+                if (set) {
+                    set.platforms[platformId] = set.platforms[platformId] === 'pending' ? 'ready' : 'pending';
+                    this.saveDatabase();
+                    this.renderPrepView();
+                }
+            },
+
+            renderPrepView() {
+                const set = this.data.creativeSets.find(s => s.id === this.activeSetId);
+                if (!set) return;
+
+                const select = document.getElementById('set-selector');
+                select.innerHTML = this.data.creativeSets.map(s => `<option value="${s.id}" ${s.id === this.activeSetId ? 'selected' : ''}>${s.name}</option>`).join('');
+
+                document.getElementById('set-name-input').value = set.name;
+                document.getElementById('set-link-input').value = set.canvaLink;
+
+                const grid = document.getElementById('prep-platform-grid');
+                grid.innerHTML = '';
+                
+                this.platforms.forEach(p => {
+                    const status = set.platforms[p.id];
+                    const isReady = status === 'ready';
+                    
+                    const card = document.createElement('div');
+                    card.className = 'prep-card';
+                    card.innerHTML = `
+                        <div>
+                            <div class="prep-card-title">${p.id}</div>
+                            <span class="prep-card-dim">(${p.dim})</span>
+                        </div>
+                        <button class="status-toggle ${isReady ? 'toggle-ready' : 'toggle-pending'}" onclick="app.toggleSetPlatform('${p.id}')">
+                            ${isReady ? 'Ready to Use' : 'Pending for Modification'}
+                        </button>
+                    `;
+                    grid.appendChild(card);
+                });
+            },
+
+            // ==========================================
+            // SMART TRACKER ENGINE
+            // ==========================================
+            
             getPlatformPrefix(platform) {
                 if (platform.includes('Meta')) return 'ASC_AD_';
                 if (platform.includes('Pinterest')) return 'PIN_AD_';
@@ -353,14 +425,11 @@
             generateName(platform) {
                 const prefix = this.getPlatformPrefix(platform);
                 let maxNum = 0;
-                
                 this.data.ads.forEach(ad => {
                     if (ad.name.startsWith(prefix)) {
                         const numPart = ad.name.replace(prefix, '');
                         const num = parseInt(numPart, 10);
-                        if (!isNaN(num) && num > maxNum) {
-                            maxNum = num;
-                        }
+                        if (!isNaN(num) && num > maxNum) maxNum = num;
                     }
                 });
                 return prefix + String(maxNum + 1).padStart(3, '0');
@@ -371,35 +440,22 @@
                 return `utm_source=${source}&utm_medium=cpc&utm_campaign=${name}`;
             },
 
-            // SMART EXCEL MATH
             calculateDays(status, startStr, endStr) {
                 if (!startStr || !status || status === 'draft') return "";
-                
                 const start = new Date(startStr);
                 start.setHours(0,0,0,0);
                 let end;
-
-                if (status === 'active') {
-                    end = new Date(); 
-                    end.setHours(0,0,0,0);
-                } else if (status === 'paused') {
+                if (status === 'active') { end = new Date(); end.setHours(0,0,0,0); } 
+                else if (status === 'paused') {
                     if (!endStr) return "Need End Date";
-                    end = new Date(endStr);
-                    end.setHours(0,0,0,0);
-                } else {
-                    return "";
-                }
-
+                    end = new Date(endStr); end.setHours(0,0,0,0);
+                } else return "";
                 const diffTime = end - start;
-                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
-                return diffDays;
+                return Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
             },
 
-            getTodayDate() {
-                return new Date().toISOString().split('T')[0];
-            },
+            getTodayDate() { return new Date().toISOString().split('T')[0]; },
 
-            // 3. Grid Operations
             addRow(duplicateFrom = null) {
                 const targetPlatform = duplicateFrom ? duplicateFrom.platform : 'Meta UK';
                 const name = this.generateName(targetPlatform);
@@ -428,6 +484,15 @@
                 const row = this.data.ads.find(a => a.id === id);
                 if(row) this.addRow(row);
             },
+            
+            deleteRow(id) {
+                if(confirm("Are you sure you want to delete this ad row?")) {
+                    this.data.ads = this.data.ads.filter(a => a.id !== id);
+                    this.saveDatabase();
+                    this.renderGrid();
+                    this.showToast("Row deleted");
+                }
+            },
 
             async updateField(id, field, value) {
                 const row = this.data.ads.find(a => a.id === id);
@@ -437,71 +502,69 @@
                     const isDuplicate = this.data.ads.some(a => a.id !== id && a.name.toLowerCase() === value.trim().toLowerCase());
                     if (isDuplicate) {
                         const suggestedName = this.generateName(row.platform);
-                        alert(`Ad name "${value}" is already used!\n\nBased on your past creations, the next available name for this platform is: ${suggestedName}\n\nAuto-applying the suggested name.`);
+                        alert(`Ad name "${value}" is already used!\n\nAuto-applying the next available name: ${suggestedName}`);
                         row.name = suggestedName;
-                    } else {
-                        row.name = value.trim();
-                    }
+                    } else row.name = value.trim();
                     row.utm = this.generateUtm(row.name, row.platform);
                 }
                 else if (field === 'platform') {
                     row.platform = value;
                     row.name = this.generateName(value); 
                     row.utm = this.generateUtm(row.name, row.platform);
-                    this.showToast(`Platform changed. Ad auto-renamed to ${row.name}`);
+                    this.showToast(`Ad auto-renamed to ${row.name}`);
                 } 
                 else if (field === 'status') {
                     const oldStatus = row.status;
                     row.status = value;
-                    
                     if (value === 'active' && oldStatus !== 'active') {
                         if(!row.startDate) row.startDate = this.getTodayDate(); 
                         row.endDate = ''; 
-                        this.showToast(`Ad Active. Start date stamped.`);
                     } 
                     else if (value === 'paused' && oldStatus !== 'paused') {
                         if(!row.endDate) row.endDate = this.getTodayDate(); 
-                        
                         if (row.materialFile) {
                             const platformDef = this.platforms.find(p => p.id === row.platform);
-                            const oldPath = platformDef.folder;
-                            const newPath = `${platformDef.folder}/Paused`;
-                            await this.movePhysicalFile(oldPath, newPath, row.materialFile);
-                            this.showToast(`Ad Paused. File auto-moved to ${newPath}`);
+                            await this.movePhysicalFile(platformDef.folder, `${platformDef.folder}/Paused`, row.materialFile);
+                            this.showToast(`Ad Paused. File moved to archive.`);
                         }
                     }
-                } 
-                else {
-                    row[field] = value;
-                }
+                } else { row[field] = value; }
 
                 await this.saveDatabase();
                 this.renderGrid(); 
             },
 
-            // 4. TOP-LEVEL GLOBAL DROPZONES
+            // TOP-LEVEL GLOBAL DROPZONES (LOCKED BY SET PREP)
             renderGlobalDropzones() {
                 const container = document.getElementById('global-dropzones');
                 container.innerHTML = '';
+                const activeSet = this.data.creativeSets.find(s => s.id === this.activeSetId);
                 
                 this.platforms.forEach(p => {
+                    const isReady = activeSet && activeSet.platforms[p.id] === 'ready';
+                    
                     const zone = document.createElement('div');
-                    zone.className = 'global-zone';
+                    zone.className = `global-zone ${!isReady ? 'locked' : ''}`;
                     zone.innerHTML = `
                         <div class="global-zone-title">${p.id}</div>
-                        <div class="global-zone-subtitle"><i data-lucide="download-cloud" style="width:14px;height:14px;"></i> Drop file here</div>
+                        <div class="global-zone-subtitle">
+                            ${isReady ? '<i data-lucide="download-cloud" style="width:14px;height:14px;"></i> Drop file here' : '<i data-lucide="lock" style="width:14px;height:14px;"></i> Modification Pending'}
+                        </div>
                     `;
                     
                     zone.addEventListener('click', () => {
+                        if (!isReady) return alert(`Resize or modification pending for ${p.id}.\nMark as 'Ready to Use' in Master Prep first.`);
                         this.activeGlobalPlatform = p.id;
                         document.getElementById('top-file-upload').click();
                     });
 
-                    zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('dragover'); });
+                    zone.addEventListener('dragover', (e) => { e.preventDefault(); if(isReady) zone.classList.add('dragover'); });
                     zone.addEventListener('dragleave', () => { zone.classList.remove('dragover'); });
                     zone.addEventListener('drop', async (e) => {
                         e.preventDefault();
                         zone.classList.remove('dragover');
+                        if (!isReady) return alert(`Resize or modification pending for ${p.id}.\nMark as 'Ready to Use' in Master Prep first.`);
+                        
                         const file = e.dataTransfer.files[0];
                         if(file) await this.processGlobalFileSave(p.id, file);
                     });
@@ -544,54 +607,8 @@
                     this.data.ads.unshift(newRow);
                     await this.saveDatabase();
                     this.renderGrid();
-                    this.showToast(`Saved ${file.name} to ${platformDef.folder} & Row created!`);
-                } catch (err) {
-                    alert("Error saving file. Check permissions.");
-                }
-            },
-
-            // 5. ROW-LEVEL FILE HANDLING
-            setupRowDropzones() {
-                const dropzones = document.querySelectorAll('.file-dropzone');
-                dropzones.forEach(zone => {
-                    zone.addEventListener('click', (e) => {
-                        if(e.target.closest('.file-pill')) return; 
-                        this.activeUploadRow = zone.dataset.id;
-                        document.getElementById('row-file-upload').click();
-                    });
-
-                    zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('dragover'); });
-                    zone.addEventListener('dragleave', () => { zone.classList.remove('dragover'); });
-                    zone.addEventListener('drop', async (e) => {
-                        e.preventDefault();
-                        zone.classList.remove('dragover');
-                        const file = e.dataTransfer.files[0];
-                        if(file) await this.processRowFileSave(zone.dataset.id, file);
-                    });
-                });
-            },
-
-            async processRowFileSave(rowId, file) {
-                const row = this.data.ads.find(a => a.id === rowId);
-                const platformDef = this.platforms.find(p => p.id === row.platform);
-                const isVideo = file.type.startsWith('video/');
-                
-                row.type = isVideo ? 'Video' : 'Single';
-                row.materialFile = file.name;
-                
-                try {
-                    const folderHandle = await this.getDirHandleByPath(platformDef.folder, true);
-                    const fileHandle = await folderHandle.getFileHandle(file.name, { create: true });
-                    const writable = await fileHandle.createWritable();
-                    await writable.write(file);
-                    await writable.close();
-                    
-                    this.showToast(`Saved ${file.name} to ${platformDef.folder}`);
-                    await this.saveDatabase();
-                    this.renderGrid();
-                } catch (err) {
-                    alert("Error saving file. Check permissions.");
-                }
+                    this.showToast(`Saved to ${platformDef.folder} & Row created!`);
+                } catch (err) { alert("Error saving file. Check permissions."); }
             },
 
             async getDirHandleByPath(path, create = false) {
@@ -614,7 +631,7 @@
                     await writable.close();
 
                     await oldFolderHandle.removeEntry(fileName);
-                } catch(e) { console.warn("Could not physically move file.", e); }
+                } catch(e) { console.warn("Could not move file physically.", e); }
             },
 
             copyToClipboard(text) {
@@ -642,24 +659,6 @@
                     
                     const daysDisplay = this.calculateDays(row.status, row.startDate, row.endDate);
 
-                    let materialHtml = `
-                        <div class="file-dropzone" data-id="${row.id}">
-                            <span style="color:var(--text-muted); font-size:12px; display:flex; align-items:center; gap:6px;">
-                                <i data-lucide="upload-cloud" style="width:14px;height:14px;"></i> Drop or Click
-                            </span>
-                        </div>`;
-                        
-                    if (row.materialFile) {
-                        materialHtml = `
-                            <div class="file-dropzone" data-id="${row.id}" title="${row.materialFile}">
-                                <div class="file-pill" onclick="app.copyToClipboard('${row.materialFile}')" style="cursor:copy;">
-                                    <i data-lucide="${row.type==='Video' ? 'video' : 'image'}" style="width:12px;height:12px; color:var(--accent);"></i>
-                                    ${row.materialFile}
-                                </div>
-                            </div>
-                        `;
-                    }
-
                     tr.innerHTML = `
                         <td class="text-center font-mono text-muted">${this.data.ads.length - index}</td>
                         <td><input type="text" class="cell-input font-mono" value="${row.name}" onchange="app.updateField('${row.id}', 'name', this.value)"></td>
@@ -684,7 +683,6 @@
                         <td><input type="date" class="cell-input font-mono text-muted" value="${row.startDate}" onchange="app.updateField('${row.id}', 'startDate', this.value)"></td>
                         <td><input type="date" class="cell-input font-mono text-muted" value="${row.endDate}" onchange="app.updateField('${row.id}', 'endDate', this.value)"></td>
                         <td class="text-center font-mono" style="${daysDisplay === 'Need End Date' ? 'color:var(--status-paused-txt); font-size:10px;' : 'color:var(--text-main);'}">${daysDisplay}</td>
-                        <td>${materialHtml}</td>
                         <td title="${row.utm}">
                             <div class="cell-content font-mono" style="cursor:copy; color:var(--text-muted); font-size:11px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" onclick="app.copyToClipboard('${row.utm}')">
                                 ${row.utm}
@@ -692,23 +690,23 @@
                         </td>
                         <td><input type="number" class="cell-input font-mono text-right" value="${row.purchases}" onchange="app.updateField('${row.id}', 'purchases', parseInt(this.value)||0)"></td>
                         <td><input type="number" step="0.01" class="cell-input font-mono text-right" value="${row.roas}" onchange="app.updateField('${row.id}', 'roas', parseFloat(this.value)||0.00)"></td>
-                        <td class="text-center">
+                        <td class="text-center" style="display:flex; justify-content:center; align-items:center; gap:4px; height:100%;">
                             <button class="btn btn-secondary" style="padding:6px; border:none;" onclick="app.duplicateRow('${row.id}')" title="Duplicate Row"><i data-lucide="copy" style="width:14px;height:14px;"></i></button>
+                            <button class="btn btn-secondary" style="padding:6px; border:none; color:var(--status-paused-txt);" onclick="app.deleteRow('${row.id}')" title="Delete Row"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>
                         </td>
                     `;
                     tbody.appendChild(tr);
                 });
 
                 lucide.createIcons();
-                this.setupRowDropzones();
             },
 
             // 7. Export
             exportCsv() {
-                let csv = "Ad Name,Platform,Type,Landing Page URL,Status,Start Date,End Date,Days Served,Material File,UTM,Purchases,ROAS\n";
+                let csv = "Ad Name,Platform,Type,Landing Page URL,Status,Start Date,End Date,Days Served,UTM,Purchases,ROAS\n";
                 this.data.ads.forEach(row => {
                     const days = this.calculateDays(row.status, row.startDate, row.endDate);
-                    csv += `"${row.name}","${row.platform}","${row.type}","${row.url}","${row.status.toUpperCase()}","${row.startDate}","${row.endDate}","${days}","${row.materialFile}","${row.utm}",${row.purchases},${row.roas}\n`;
+                    csv += `"${row.name}","${row.platform}","${row.type}","${row.url}","${row.status.toUpperCase()}","${row.startDate}","${row.endDate}","${days}","${row.utm}",${row.purchases},${row.roas}\n`;
                 });
                 
                 const blob = new Blob([csv], { type: 'text/csv' });
@@ -720,16 +718,7 @@
             }
         };
 
-        // Attach listener for Click-to-Upload Hidden Inputs
-        document.getElementById('row-file-upload').addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (file && app.activeUploadRow) {
-                await app.processRowFileSave(app.activeUploadRow, file);
-                app.activeUploadRow = null;
-            }
-            e.target.value = ''; 
-        });
-
+        // Input for Click-to-Upload
         document.getElementById('top-file-upload').addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (file && app.activeGlobalPlatform) {
