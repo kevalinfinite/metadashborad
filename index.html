@@ -9,171 +9,158 @@
     
     <style>
         :root {
-            /* Airtable-style Dark Theme Colors */
-            --bg-base: #141414;
-            --surface: #1E1E1E;
-            --surface-hover: #2D2D2D;
+            /* Ultra-Premium Dark Theme */
+            --bg-base: #111111;
+            --surface: #1C1C1C;
+            --surface-hover: #2A2A2A;
             --border: #333333;
-            --text-main: #E0E0E0;
+            --text-main: #EEEEEE;
             --text-muted: #888888;
-            --accent: #46A758; 
-            --accent-hover: #3E944E;
+            --accent: #4CAF50; 
+            --accent-hover: #45A049;
             
             /* Status Colors */
-            --status-active-bg: rgba(70, 167, 88, 0.2);
-            --status-active-txt: #4ADE80;
-            --status-paused-bg: rgba(220, 38, 38, 0.2);
-            --status-paused-txt: #F87171;
-            --status-draft-bg: rgba(255, 255, 255, 0.1);
-            --status-draft-txt: #A1A1AA;
+            --status-active-bg: rgba(76, 175, 80, 0.15);
+            --status-active-txt: #66BB6A;
+            --status-paused-bg: rgba(244, 67, 54, 0.15);
+            --status-paused-txt: #EF5350;
+            --status-draft-bg: rgba(255, 255, 255, 0.08);
+            --status-draft-txt: #B0B0B0;
             
-            --radius: 6px;
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg-base); color: var(--text-main); height: 100vh; overflow: hidden; display: flex; flex-direction: column;}
         
-        /* Topbar */
-        .topbar { height: 64px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; background: var(--surface); flex-shrink: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 20;}
-        .brand { font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px; color: var(--accent); }
-        .nav-tabs { display: flex; gap: 8px; margin-left: 32px; border-left: 1px solid var(--border); padding-left: 32px;}
-        .nav-tab { padding: 8px 16px; border-radius: var(--radius); cursor: pointer; font-size: 14px; font-weight: 500; color: var(--text-muted); transition: 0.2s;}
-        .nav-tab.active { background: rgba(70, 167, 88, 0.1); color: var(--accent); }
-        .nav-tab:hover:not(.active) { background: var(--surface-hover); color: var(--text-main);}
-        
-        /* Buttons */
-        .btn { padding: 6px 14px; border-radius: var(--radius); border: none; font-size: 13px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s;}
-        .btn-primary { background: var(--accent); color: #fff; }
-        .btn-primary:hover { background: var(--accent-hover); }
-        .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
-        .btn-secondary:hover { background: var(--surface-hover); }
-
-        /* VIEWS */
-        .view-container { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-        .hidden { display: none !important; }
-
-        /* =========================================
-           VIEW 1: SET PREPARATION (NEW DASHBOARD)
-           ========================================= */
-        #view-prep { overflow-y: auto; padding: 40px; background: var(--bg-base); display: flex; flex-direction: column; align-items: center; }
-        
-        .prep-header-controls { width: 100%; max-width: 900px; display: flex; justify-content: space-between; margin-bottom: 24px; align-items: center;}
-        .prep-select { background: var(--surface); border: 1px solid var(--border); color: var(--text-main); padding: 8px 16px; border-radius: var(--radius); font-size: 14px; outline: none; min-width: 300px;}
-        
-        .prep-central-box { width: 100%; max-width: 900px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 32px; display: flex; flex-direction: column; gap: 16px; align-items: center; text-align: center; margin-bottom: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);}
-        .prep-set-name { background: transparent; border: none; color: var(--text-main); font-size: 24px; font-weight: 600; text-align: center; width: 100%; outline: none; border-bottom: 1px dashed transparent; transition: 0.2s;}
-        .prep-set-name:focus { border-bottom-color: var(--accent); }
-        .prep-canva-link { width: 100%; max-width: 600px; background: var(--bg-base); border: 1px solid var(--border); padding: 12px 16px; border-radius: 8px; color: var(--text-main); font-size: 14px; outline: none; text-align: center; transition: 0.2s;}
-        .prep-canva-link:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(70, 167, 88, 0.2);}
-        
-        .prep-grid { display: gridThis is a major structural enhancement. You are building a true "Command Center" where the Master Dashboard acts as the absolute; grid-template-columns: repeat(3, 1fr); gap: 24px; width: 100%; max-width: 900px; }
-        .prep-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12 gatekeeper before any ad tracking begins.
-
-I have strictly followed your UI wireframe and logic requirements. **Nothing has been removed.** The CSV export, Airtpx; padding: 24px; display: flex; flex-direction: column; align-items: center; text-align: center; gapable UI, auto-folder movement, and days calculations remain fully active.
-
-### What has been upgraded:
-1. **The Master Dashboard (Pre-Tracker: 16px; transition: 0.2s;}
-        .prep-card:hover { border-color: var(--text-muted); }
-        .prep-card-title { font-size: 16px; font-weight: 600; color: var(--text-main); Gatekeeper):**
-   - Added the central "Set Title" and "Canva Link" inputs exactly as you designed. These auto-save to your Drive so }
-        .prep-card-dim { font-size: 12px; color: var(--text-muted); font-family: 'JetBrains Mono', you never lose the source link.
-   - Replaced the generic top zones with the **6 strict Platform Boxes** featuring exact dimension requirements (1080 monospace; margin-top: 4px; display: block;}
-        
-        .status-toggle { width: 100%; padding: 12px; border-radius: 8px; border: none; font-size: 13px; font-weight: 600; cursorx1080, 1000x1500, etc.).
-2. **Strict Status Gating:**
-   - Every box defaults to **: pointer; transition: 0.2s; }
-        .toggle-pending { background: rgba(220, 38, 38"Pending for Modification"** (Red).
-   - If you try to click "New Row" in the tracker, or try to assign a row to a Pending platform, you, 0.1); color: var(--status-paused-txt); border: 1px solid rgba(220, 38, 38 get a strict pop-up warning blocking you: *"Resize pending or modification pending msg"*.
-3. **The Unlock Workflow:**
-   - You **, 0.3); }
-        .toggle-pending:hover { background: rgba(220, 38, 38, 0.2); }
-        .toggle-ready { background: rgba(70, 167, 88, 0.1); color: var(--status-drag and drop** a file directly onto a Pending box.
-   - The tool physically saves it to the Drive, auto-creates the Tracker Row, and instantly flips theactive-txt); border: 1px solid rgba(70, 167, 88, 0.3); }
-        .toggle-ready box to **"Ready to Use"** (Green).
-   - *Only then* is that specific platform unlocked for editing and duplicating in the main DataGrid tracker:hover { background: rgba(70, 167, 88, 0.2); }
-
-
-        /* =========================================
-           VIEW  below.
-
-### Save this as `bedworld-pipeline.html` and replace your current code completely:
-```html
-<!DOCTYPE html>
-<html lang="en" data-theme="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BedWorld | Smart Tracker</title>
-    <link href="[https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap)" rel="stylesheet">
-    <script src="[https://unpkg.com/lucide@latest](https://unpkg.com/lucide@latest)"></script>
-    
-    <style>
-        :root {
-            /* Airtable-style Dark Theme Colors */
-            --bg-base: #141414;
-            --surface: #1E1E1E;
-            --surface-hover: #2D2D2D;
-            --border: #333333;
-            --text-main: #E0E0E0;
-            --text-muted: #888888;
-            --accent: #46A758; /* Premium Green */
-            --accent-hover: #3E944E;
-            
-            /* Status Colors */
-            --status-active-bg: rgba(70, 167, 88, 0.2);
-            --status-active-txt: #4ADE80;
-            --status-paused-bg: rgba(220, 38, 38, 0.2);
-            --status-paused-txt: #F87171;
-            --status-draft-bg: rgba(255, 255, 255, 0.1);
-            --status-draft-txt: #A1A1AA;
-            
-            --radius: 6px;
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg-base); 
+            color: var(--text-main); 
+            height: 100vh; 
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg-base); color: var(--text-main); height: 100vh; overflow: hidden; display: flex; flex-direction: column;}
-        
-        /* Topbar */
-        .topbar { height: 64px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; background: var(--surface); flex-shrink: 0; z-index: 20;}
-        .brand { font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px; color: var(--accent); }
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar { width: 10px; height: 10px; }
+        ::-webkit-scrollbar-track { background: var(--bg-base); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+        /* --- Topbar --- */
+        .topbar { 
+            height: 64px; 
+            border-bottom: 1px solid var(--border); 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 0 24px; 
+            background: var(--surface); 
+            flex-shrink: 0; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2); 
+            z-index: 20;
+        }
+        .brand { font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px; color: var(--accent); letter-spacing: -0.3px;}
         
         /* Buttons */
-        .btn { padding: 6px 14px; border-radius: var(--radius); border: none; font-size: 13px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s;}
+        .btn { padding: 8px 16px; border-radius: var(--radius-sm); border: none; font-size: 13px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; font-family: 'Inter', sans-serif;}
         .btn-primary { background: var(--accent); color: #fff; }
         .btn-primary:hover { background: var(--accent-hover); }
         .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
-        .btn-secondary:hover { background: var(--surface-hover); }
+        .btn-secondary:hover { background: var(--surface-hover); border-color: var(--text-muted);}
 
-        /* Master Set Dashboard (The Gatekeeper) */
-        .master-dashboard { padding: 32px 24px; background: var(--bg-base); border-bottom: 1px solid var(--border); flex-shrink: 0; display: flex; flex-direction: column; align-items: center; }
-        .md-header { border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 24px; width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 12px; background: var(--surface); text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2);}
-        .md-title-input { background: transparent; border: none; color: var(--text-main); font-size: 16px; font-weight: 600; text-align: center; outline: none; width: 100%;}
-        .md-title-input::placeholder { color: var(--text-main); opacity: 0.8;}
-        .md-link-input { background: transparent; border: none; color: var(--text-muted); font-size: 13px; text-align: center; outline: none; width: 100%;}
-        .md-platforms { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; width: 100%; max-width: 1400px;}
-        
-        .md-box { border: 1px solid var(--border); border-radius: 8px; padding: 16px; width: 200px; text-align: center; background: var(--surface); cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; gap: 6px; }
-        .md-box:hover { border-color: var(--text-muted); }
-        .md-box.dragover { background: rgba(70, 167, 88, 0.1); border-color: var(--accent); }
-        .md-box-title { font-weight: 600; font-size: 14px; color: var(--text-main); pointer-events: none;}
-        .md-box-dim { font-size: 11px; color: var(--text-muted); pointer-events: none; font-family: 'JetBrains Mono', monospace; margin-bottom: 8px;}
-        .md-box-status { font-size: 11px; font-weight: 600; padding: 6px; border-radius: 4px; pointer-events: none;}
-        
-        .md-status-pending { color: var(--status-paused-txt); background: var(--status-paused-bg); }
-        .md-status-ready { color: var(--status-active-txt); background: var(--status-active-bg); }
+        /* --- Global Dropzones (Responsive Grid) --- */
+        .global-dropzones-wrapper {
+            padding: 24px;
+            background: var(--bg-base);
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+            z-index: 10;
+        }
+        .global-dropzones { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 16px; 
+            width: 100%;
+        }
+        .global-zone { 
+            height: 84px; 
+            border: 2px dashed var(--border); 
+            border-radius: var(--radius-md); 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 6px; 
+            cursor: pointer; 
+            transition: all 0.2s ease; 
+            background: var(--surface); 
+            color: var(--text-muted); 
+        }
+        .global-zone:hover, .global-zone.dragover { 
+            border-color: var(--accent); 
+            background: rgba(76, 175, 80, 0.05); 
+            color: var(--text-main); 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        .global-zone-title { font-weight: 600; font-size: 14px; color: var(--text-main); pointer-events: none;}
+        .global-zone-subtitle { font-size: 11px; pointer-events: none; display: flex; align-items: center; gap: 6px; font-family: 'JetBrains Mono', monospace;}
 
-        /* Workspace & DataGrid */
+        /* --- DataGrid Workspace --- */
         .workspace { flex: 1; overflow: auto; padding: 0; position: relative; background: var(--bg-base);}
         
-        .datagrid { width: 100%; border-collapse: collapse; text-align: left; min-width: 1700px;}
-        .datagrid th { position: sticky; top: 0; background: var(--surface); z-index: 10; padding: 12px 16px; font-size: 12px; font-weight: 600; color: var(--text-muted); border-bottom: 1<px solid var(--border); border-right: 1px solid var(--border); white-space: nowrap; box-shadow: 0 1px 0 var(--border);}
-        .datagrid td { padding: 0; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); vertical-align: middle; height: 48px; background: transparent; transition: 0.1s;}
+        .datagrid { width: 100%; border-collapse: separate; border-spacing: 0; text-align: left; min-width: 1700px;}
+        
+        .datagrid th { 
+            position: sticky; 
+            top: 0; 
+            background: var(--surface); 
+            z-index: 10; 
+            padding: 12px 16px; 
+            font-size: 11px; 
+            font-weight: 600; 
+            color: var(--text-muted); 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border); 
+            border-right: 1px solid var(--border); 
+            white-space: nowrap; 
+        }
+        .datagrid th::after {
+            content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 1px; background: var(--border);
+        }
+
+        .datagrid td { 
+            padding: 0; 
+            border-bottom: 1px solid var(--border); 
+            border-right: 1px solid var(--border); 
+            vertical-align: middle; 
+            height: 48px; 
+            background: transparent; 
+            transition: 0.1s;
+        }
         .datagrid tr:hover td { background: var(--surface-hover); }
         
         /* Inputs & Cells */
-        .cell-content { width: 100%; height: 100%; padding: 8px 16px; display: flex; align-items: center; font-size: 13px; color: var(--text-main); }
-        .cell-input { width: 100%; height: 100%; padding: 8px 16px; background: transparent; border: none; color: var(--text-main); font-family: inherit; font-size: 13px; outline: none; }
-        .cell-input:focus { background: rgba(70, 167, 88, 0.05); box-shadow: inset 0 0 0 2px var(--accent); border-radius: 2px;}
+        .cell-content { width: 100%; height: 100%; padding: 0 16px; display: flex; align-items: center; font-size: 13px; color: var(--text-main); }
+        .cell-input { 
+            width: 100%; 
+            height: 100%; 
+            padding: 0 16px; 
+            background: transparent; 
+            border: none; 
+            color: var(--text-main); 
+            font-family: inherit; 
+            font-size: 13px; 
+            outline: none; 
+            display: flex;
+            align-items: center;
+        }
+        .cell-input:focus { background: rgba(76, 175, 80, 0.05); box-shadow: inset 0 0 0 2px var(--accent); }
         
         .font-mono { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
         .text-center { text-align: center; justify-content: center; }
@@ -181,22 +168,36 @@ I have strictly followed your UI wireframe and logic requirements. **Nothing has
         
         /* Dropdowns (Status Badges) */
         .status-cell { padding: 0 12px; }
-        .status-select { appearance: none; background: transparent; border: none; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; outline: none; width: 100%; text-align: center; font-family: 'Inter', sans-serif;}
-        .status-draft { color: var(--status-draft-txt); background: var(--status-draft-bg); }
-        .status-active { color: var(--status-active-txt); background: var(--status-active-bg); }
-        .status-paused { color: var(--status-paused-txt); background: var(--status-paused-bg); }
+        .status-select { 
+            appearance: none; 
+            background: transparent; 
+            border: none; 
+            padding: 6px 12px; 
+            border-radius: 20px; 
+            font-size: 11px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            outline: none; 
+            width: 100%; 
+            text-align: center; 
+            font-family: 'Inter', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .status-draft { color: var(--status-draft-txt); background: var(--status-draft-bg); border: 1px solid rgba(255,255,255,0.1); }
+        .status-active { color: var(--status-active-txt); background: var(--status-active-bg); border: 1px solid rgba(76, 175, 80, 0.3);}
+        .status-paused { color: var(--status-paused-txt); background: var(--status-paused-bg); border: 1px solid rgba(244, 67, 54, 0.3);}
 
-        /* Row Level File Dropzone */
+        /* Row Dropzone */
         .file-dropzone { width: 100%; height: 100%; display: flex; align-items: center; justify-content: flex-start; padding: 0 16px; gap: 8px; cursor: pointer; transition: 0.2s; border: 2px dashed transparent;}
-        .file-dropzone.dragover { border-color: var(--accent); background: rgba(70, 167, 88, 0.1); }
-        .file-pill { display: inline-flex; align-items: center; gap: 6px; background: var(--surface); border: 1px solid var(--border); padding: 6px 10px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px;}
+        .file-dropzone.dragover { border-color: var(--accent); background: rgba(76, 175, 80, 0.1); }
+        .file-pill { display: inline-flex; align-items: center; gap: 6px; background: var(--surface); border: 1px solid var(--border); padding: 6px 10px; border-radius: var(--radius-sm); font-family: 'JetBrains Mono', monospace; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px;}
         .file-pill:hover { border-color: var(--accent); }
 
-        /* Connect Screen */
+        /* --- Overlays & Notifications --- */
         #connect-screen { position: fixed; inset: 0; background: var(--bg-base); z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
         
-        /* Toast */
-        #toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--text-main); color: var(--bg-base); padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 13px; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 300; display: flex; gap: 8px; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);}
+        #toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--text-main); color: var(--bg-base); padding: 12px 24px; border-radius: var(--radius-md); font-weight: 600; font-size: 13px; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 300; display: flex; gap: 8px; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);}
         #toast.show { transform: translateX(-50%) translateY(0); }
 
         .hidden { display: none !important; }
@@ -207,41 +208,38 @@ I have strictly followed your UI wireframe and logic requirements. **Nothing has
 
     <!-- Hidden Global File Inputs -->
     <input type="file" id="row-file-upload" class="hidden" accept="image/*,video/*">
-    <input type="file" id="master-box-upload" class="hidden" accept="image/*,video/*">
+    <input type="file" id="top-file-upload" class="hidden" accept="image/*,video/*">
 
     <!-- Connection Screen -->
     <div id="connect-screen">
         <i data-lucide="layout-grid" style="width: 56px; height: 56px; color: var(--accent); margin-bottom: 24px;"></i>
         <h1 style="margin-bottom: 12px; font-size: 28px;">Connect Drive Workspace</h1>
-        <p style="color: var(--text-muted); margin-bottom: 32px; max-width: 400px; font-size: 14px; line-height: 1.5;">Select your root folder to load the Smart Tracker. The Master Dashboard gatekeeper will initialize automatically.</p>
+        <p style="color: var(--text-muted); margin-bottom: 32px; max-width: 400px; font-size: 14px; line-height: 1.5;">Select your root folder to load the Smart Tracker. All files dropped into the grid will automatically save to your drive.</p>
         <button class="btn btn-primary" style="padding: 12px 24px; font-size: 15px;" onclick="app.connectFolder()">
             <i data-lucide="folder-open"></i> Select Workspace Folder
         </button>
     </div>
 
-    <!-- Toast -->
+    <!-- Toast Notification -->
     <div id="toast"><i data-lucide="check-circle" style="width:16px;height:16px; color:var(--accent);"></i> <span id="toast-msg">Action successful</span></div>
 
     <!-- Topbar -->
     <header class="topbar">
         <div class="brand"><i data-lucide="layout-template"></i> BedWorld Smart Tracker</div>
-        <div style="display: flex; gap: 12px; align-items: center;">
-            <div style="font-size: 12px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; margin-right: 16px;">
+        <div style="display: flex; gap: 16px; align-items: center;">
+            <div style="font-size: 12px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace;">
                 Drive Connected: <span id="drive-name" style="color:var(--text-main);">None</span>
             </div>
+            <div style="width: 1px; height: 24px; background: var(--border);"></div>
             <button class="btn btn-secondary" onclick="app.exportCsv()"><i data-lucide="download"></i> Export CSV</button>
-            <button class="btn btn-primary" onclick="app.addRow()"><i data-lucide="plus"></i> New Empty Row</button>
+            <button class="btn btn-primary" onclick="app.addRow()"><i data-lucide="plus"></i> New Row</button>
         </div>
     </header>
 
-    <!-- Master Set Dashboard (The Gatekeeper) -->
-    <div class="master-dashboard" id="master-dashboard">
-        <div class="md-header">
-            <input type="text" id="md-title" class="md-title-input" placeholder="Set1_1st week_May'26 Creative Approved by Client" onchange="app.updateMasterSet('title', this.value)">
-            <input type="text" id="md-link" class="md-link-input" placeholder="(I will just past an Canva Link here. It will be stored for future use and access)" onchange="app.updateMasterSet('link', this.value)">
-        </div>
-        <div class="md-platforms" id="md-platforms">
-            <!-- Boxes rendered via JS -->
+    <!-- Rapid Ingestion Dropzones -->
+    <div class="global-dropzones-wrapper">
+        <div class="global-dropzones" id="global-dropzones">
+            <!-- Rendered via JS -->
         </div>
     </div>
 
@@ -259,7 +257,7 @@ I have strictly followed your UI wireframe and logic requirements. **Nothing has
                     <th style="width: 140px;">Start Date</th>
                     <th style="width: 140px;">End Date</th>
                     <th style="width: 100px; text-align: center;">Days</th>
-                    <th style="width: 260px;">Material File (Drop or Click)</th>
+                    <th style="width: 260px;">Material File (Drop/Click)</th>
                     <th style="width: 220px;">UTM Tracker</th>
                     <th style="width: 100px; text-align: right;">Purchases</th>
                     <th style="width: 100px; text-align: right;">ROAS</th>
@@ -276,34 +274,23 @@ I have strictly followed your UI wireframe and logic requirements. **Nothing has
         lucide.createIcons();
 
         // ----------------------------------------------------
-        // GLOBAL DRAG PREVENTION
+        // GLOBAL DRAG PREVENTION (Forces drop onto zones only)
         // ----------------------------------------------------
         window.addEventListener("dragover", function(e) { e.preventDefault(); }, false);
         window.addEventListener("drop", function(e) { e.preventDefault(); }, false);
 
         const app = {
             dirHandle: null,
-            data: { 
-                ads: [], 
-                activeSet: {
-                    title: "",
-                    link: "",
-                    platforms: {
-                        'Meta UK': 'pending', 'Meta Ireland': 'pending',
-                        'Pinterest UK': 'pending', 'Pinterest Ireland': 'pending',
-                        'TikTok UK': 'pending', 'TikTok Ireland': 'pending'
-                    }
-                } 
-            },
+            data: { ads: [] },
             activeUploadRow: null,
-            activeMasterBox: null,
+            activeGlobalPlatform: null,
             platforms: [
-                { id: 'Meta UK', folder: '03_Meta UK', dim: '1080x1080' },
-                { id: 'Meta Ireland', folder: '03_Meta Ireland', dim: '1080x1080' },
-                { id: 'Pinterest UK', folder: '04_Pinterest UK', dim: '1000x1500' },
-                { id: 'Pinterest Ireland', folder: '04_Pinterest Ireland', dim: '1000x1500' },
-                { id: 'TikTok UK', folder: '05_TikTok UK', dim: '1080x1920' },
-                { id: 'TikTok Ireland', folder: '05_TikTok Ireland', dim: '1080x1920' }
+                { id: 'Meta UK', folder: '03_Meta UK' },
+                { id: 'Meta Ireland', folder: '03_Meta Ireland' },
+                { id: 'Pinterest UK', folder: '04_Pinterest UK' },
+                { id: 'Pinterest Ireland', folder: '04_Pinterest Ireland' },
+                { id: 'TikTok UK', folder: '05_TikTok UK' },
+                { id: 'TikTok Ireland', folder: '05_TikTok Ireland' }
             ],
 
             showToast(msg) {
@@ -322,7 +309,7 @@ I have strictly followed your UI wireframe and logic requirements. **Nothing has
                     
                     await this.syncFolders();
                     await this.loadDatabase();
-                    this.renderMasterDashboard();
+                    this.renderGlobalDropzones();
                     this.renderGrid();
                 } catch (err) { console.error(err); }
             },
@@ -342,13 +329,7 @@ I have strictly followed your UI wireframe and logic requirements. **Nothing has
                     const fileHandle = await this.dirHandle.getFileHandle('tracker_db.json', { create: true });
                     const file = await fileHandle.getFile();
                     const contents = await file.text();
-                    if (contents) {
-                        this.data = JSON.parse(contents);
-                        // Migration safety for older data
-                        if (!this.data.activeSet) {
-                            this.data.activeSet = { title: "", link: "", platforms: { 'Meta UK': 'pending', 'Meta Ireland': 'pending', 'Pinterest UK': 'pending', 'Pinterest Ireland': 'pending', 'TikTok UK': 'pending', 'TikTok Ireland': 'pending' } };
-                        }
-                    }
+                    if (contents) this.data = JSON.parse(contents);
                 } catch (e) { console.log("New database created."); }
             },
 
@@ -361,100 +342,7 @@ I have strictly followed your UI wireframe and logic requirements. **Nothing has
                 } catch (e) { console.warn("Save failed", e); }
             },
 
-            // 2. MASTER SET DASHBOARD (The Gatekeeper)
-            updateMasterSet(field, value) {
-                this.data.activeSet[field] = value;
-                this.saveDatabase();
-                this.showToast(`Saved ${field} to Database`);
-            },
-
-            renderMasterDashboard() {
-                document.getElementById('md-title').value = this.data.activeSet.title || "";
-                document.getElementById('md-link').value = this.data.activeSet.link || "";
-
-                const container = document.getElementById('md-platforms');
-                container.innerHTML = '';
-                
-                this.platforms.forEach(p => {
-                    const status = this.data.activeSet.platforms[p.id];
-                    const isReady = status === 'ready';
-                    
-                    const box = document.createElement('div');
-                    box.className = 'md-box';
-                    box.innerHTML = `
-                        <div class="md-box-title">${p.id}</div>
-                        <div class="md-box-dim">(${p.dim})</div>
-                        <div class="md-box-status ${isReady ? 'md-status-ready' : 'md-status-pending'}">
-                            ${isReady ? 'Ready to Use' : 'Pending for Modification'}
-                        </div>
-                    `;
-                    
-                    // Click Trigger
-                    box.addEventListener('click', () => {
-                        this.activeMasterBox = p.id;
-                        document.getElementById('master-box-upload').click();
-                    });
-
-                    // Drag & Drop Triggers
-                    box.addEventListener('dragover', (e) => { e.preventDefault(); box.classList.add('dragover'); });
-                    box.addEventListener('dragleave', () => { box.classList.remove('dragover'); });
-                    box.addEventListener('drop', async (e) => {
-                        e.preventDefault();
-                        box.classList.remove('dragover');
-                        const file = e.dataTransfer.files[0];
-                        if(file) await this.processMasterBoxSave(p.id, file);
-                    });
-
-                    container.appendChild(box);
-                });
-                lucide.createIcons();
-            },
-
-            async processMasterBoxSave(platformId, file) {
-                if(!this.dirHandle) return;
-                
-                const platformDef = this.platforms.find(p => p.id === platformId);
-                const isVideo = file.type.startsWith('video/');
-                const name = this.generateName(platformId);
-                
-                try {
-                    // 1. Physically save file to drive
-                    const folderHandle = await this.getDirHandleByPath(platformDef.folder, true);
-                    const fileHandle = await folderHandle.getFileHandle(file.name, { create: true });
-                    const writable = await fileHandle.createWritable();
-                    await writable.write(file);
-                    await writable.close();
-                    
-                    // 2. Mark as Ready in Master Set
-                    this.data.activeSet.platforms[platformId] = 'ready';
-                    
-                    // 3. Create new tracker row automatically
-                    const newRow = {
-                        id: Date.now().toString(),
-                        name: name,
-                        platform: platformId,
-                        type: isVideo ? 'Video' : 'Single',
-                        url: '[https://www.bedworld.net/](https://www.bedworld.net/)',
-                        status: 'draft',
-                        startDate: '',
-                        endDate: '',
-                        materialFile: file.name,
-                        utm: this.generateUtm(name, platformId),
-                        purchases: 0,
-                        roas: 0.00
-                    };
-                    this.data.ads.unshift(newRow);
-                    
-                    await this.saveDatabase();
-                    this.renderMasterDashboard();
-                    this.renderGrid();
-                    this.showToast(`Saved to ${platformDef.folder} & Tracker Unlocked!`);
-                } catch (err) {
-                    alert("Error saving file. Check permissions.");
-                }
-            },
-
-            // 3. Data Logic & Smart Calculations (NAMING ENGINE)
+            // 2. Data Logic & Smart Calculations
             getPlatformPrefix(platform) {
                 if (platform.includes('Meta')) return 'ASC_AD_';
                 if (platform.includes('Pinterest')) return 'PIN_AD_';
@@ -465,10 +353,14 @@ I have strictly followed your UI wireframe and logic requirements. **Nothing has
             generateName(platform) {
                 const prefix = this.getPlatformPrefix(platform);
                 let maxNum = 0;
+                
                 this.data.ads.forEach(ad => {
                     if (ad.name.startsWith(prefix)) {
-                        const num = parseInt(ad.name.replace(prefix, ''), 10);
-                        if (!isNaN(num) && num > maxNum) maxNum = num;
+                        const numPart = ad.name.replace(prefix, '');
+                        const num = parseInt(numPart, 10);
+                        if (!isNaN(num) && num > maxNum) {
+                            maxNum = num;
+                        }
                     }
                 });
                 return prefix + String(maxNum + 1).padStart(3, '0');
@@ -479,22 +371,27 @@ I have strictly followed your UI wireframe and logic requirements. **Nothing has
                 return `utm_source=${source}&utm_medium=cpc&utm_campaign=${name}`;
             },
 
+            // SMART EXCEL MATH
             calculateDays(status, startStr, endStr) {
                 if (!startStr || !status || status === 'draft') return "";
+                
                 const start = new Date(startStr);
                 start.setHours(0,0,0,0);
                 let end;
 
                 if (status === 'active') {
-                    end = new Date();
+                    end = new Date(); 
                     end.setHours(0,0,0,0);
                 } else if (status === 'paused') {
                     if (!endStr) return "Need End Date";
                     end = new Date(endStr);
                     end.setHours(0,0,0,0);
-                } else return "";
+                } else {
+                    return "";
+                }
 
-                const diffDays = Math.floor((end - start) / (1000 * 60 * 60 * 24)) + 1;
+                const diffTime = end - start;
+                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
                 return diffDays;
             },
 
@@ -502,32 +399,21 @@ I have strictly followed your UI wireframe and logic requirements. **Nothing has
                 return new Date().toISOString().split('T')[0];
             },
 
-            // 4. Grid Operations with Gating Logic
+            // 3. Grid Operations
             addRow(duplicateFrom = null) {
-                // Strict Gating: Check if ANY platform is ready
-                const readyPlatforms = Object.keys(this.data.activeSet.platforms).filter(k => this.data.activeSet.platforms[k] === 'ready');
-                if (readyPlatforms.length === 0) {
-                    alert("Resize pending or modification pending msg: Please drop a material in at least one platform box in the Master Dashboard above to unlock the tracker.");
-                    return;
-                }
-
-                const targetPlatform = duplicateFrom ? duplicateFrom.platform : readyPlatforms[0];
-                
-                // Block duplicating into a currently pending platform
-                if (this.data.activeSet.platforms[targetPlatform] !== 'ready') {
-                    alert(`Resize pending or modification pending msg: Please upload the material for ${targetPlatform} to the Master Dashboard first.`);
-                    return;
-                }
-
+                const targetPlatform = duplicateFrom ? duplicateFrom.platform : 'Meta UK';
                 const name = this.generateName(targetPlatform);
+                
                 const newRow = {
                     id: Date.now().toString(),
                     name: name,
                     platform: targetPlatform,
                     type: duplicateFrom ? duplicateFrom.type : 'Single',
-                    url: duplicateFrom ? duplicateFrom.url : '[https://www.bedworld.net/](https://www.bedworld.net/)',
+                    url: duplicateFrom ? duplicateFrom.url : 'https://www.bedworld.net/',
                     status: 'draft',
-                    startDate: '', endDate: '', materialFile: '',
+                    startDate: '',
+                    endDate: '',
+                    materialFile: '',
                     utm: this.generateUtm(name, targetPlatform),
                     purchases: duplicateFrom ? duplicateFrom.purchases : 0,
                     roas: duplicateFrom ? duplicateFrom.roas : 0.00
@@ -551,7 +437,7 @@ I have strictly followed your UI wireframe and logic requirements. **Nothing has
                     const isDuplicate = this.data.ads.some(a => a.id !== id && a.name.toLowerCase() === value.trim().toLowerCase());
                     if (isDuplicate) {
                         const suggestedName = this.generateName(row.platform);
-                        alert(`Ad name "${value}" is already used!\n\nAuto-applying the next available name for this platform: ${suggestedName}`);
+                        alert(`Ad name "${value}" is already used!\n\nBased on your past creations, the next available name for this platform is: ${suggestedName}\n\nAuto-applying the suggested name.`);
                         row.name = suggestedName;
                     } else {
                         row.name = value.trim();
@@ -559,37 +445,109 @@ I have strictly followed your UI wireframe and logic requirements. **Nothing has
                     row.utm = this.generateUtm(row.name, row.platform);
                 }
                 else if (field === 'platform') {
-                    // Strict Gating: Block changing to a pending platform
-                    if (this.data.activeSet.platforms[value] !== 'ready') {
-                        alert(`Resize pending or modification pending msg: Please upload material for ${value} to the Master Dashboard first.`);
-                        this.renderGrid(); // Revert UI
-                        return;
-                    }
                     row.platform = value;
                     row.name = this.generateName(value); 
                     row.utm = this.generateUtm(row.name, row.platform);
-                    this.showToast(`Platform changed. Auto-renamed to ${row.name}`);
+                    this.showToast(`Platform changed. Ad auto-renamed to ${row.name}`);
                 } 
                 else if (field === 'status') {
                     const oldStatus = row.status;
                     row.status = value;
+                    
                     if (value === 'active' && oldStatus !== 'active') {
                         if(!row.startDate) row.startDate = this.getTodayDate(); 
                         row.endDate = ''; 
+                        this.showToast(`Ad Active. Start date stamped.`);
                     } 
                     else if (value === 'paused' && oldStatus !== 'paused') {
                         if(!row.endDate) row.endDate = this.getTodayDate(); 
+                        
                         if (row.materialFile) {
                             const platformDef = this.platforms.find(p => p.id === row.platform);
-                            await this.movePhysicalFile(platformDef.folder, `${platformDef.folder}/Paused`, row.materialFile);
-                            this.showToast(`File auto-moved to Paused folder`);
+                            const oldPath = platformDef.folder;
+                            const newPath = `${platformDef.folder}/Paused`;
+                            await this.movePhysicalFile(oldPath, newPath, row.materialFile);
+                            this.showToast(`Ad Paused. File auto-moved to ${newPath}`);
                         }
                     }
                 } 
-                else { row[field] = value; }
+                else {
+                    row[field] = value;
+                }
 
                 await this.saveDatabase();
                 this.renderGrid(); 
+            },
+
+            // 4. TOP-LEVEL GLOBAL DROPZONES
+            renderGlobalDropzones() {
+                const container = document.getElementById('global-dropzones');
+                container.innerHTML = '';
+                
+                this.platforms.forEach(p => {
+                    const zone = document.createElement('div');
+                    zone.className = 'global-zone';
+                    zone.innerHTML = `
+                        <div class="global-zone-title">${p.id}</div>
+                        <div class="global-zone-subtitle"><i data-lucide="download-cloud" style="width:14px;height:14px;"></i> Drop file here</div>
+                    `;
+                    
+                    zone.addEventListener('click', () => {
+                        this.activeGlobalPlatform = p.id;
+                        document.getElementById('top-file-upload').click();
+                    });
+
+                    zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('dragover'); });
+                    zone.addEventListener('dragleave', () => { zone.classList.remove('dragover'); });
+                    zone.addEventListener('drop', async (e) => {
+                        e.preventDefault();
+                        zone.classList.remove('dragover');
+                        const file = e.dataTransfer.files[0];
+                        if(file) await this.processGlobalFileSave(p.id, file);
+                    });
+
+                    container.appendChild(zone);
+                });
+                lucide.createIcons();
+            },
+
+            async processGlobalFileSave(platformId, file) {
+                if(!this.dirHandle) return alert("Please connect Workspace Folder first.");
+                
+                const platformDef = this.platforms.find(p => p.id === platformId);
+                const isVideo = file.type.startsWith('video/');
+                const type = isVideo ? 'Video' : 'Single';
+                const name = this.generateName(platformId);
+                
+                try {
+                    const folderHandle = await this.getDirHandleByPath(platformDef.folder, true);
+                    const fileHandle = await folderHandle.getFileHandle(file.name, { create: true });
+                    const writable = await fileHandle.createWritable();
+                    await writable.write(file);
+                    await writable.close();
+                    
+                    const newRow = {
+                        id: Date.now().toString(),
+                        name: name,
+                        platform: platformId,
+                        type: type,
+                        url: 'https://www.bedworld.net/',
+                        status: 'draft',
+                        startDate: '',
+                        endDate: '',
+                        materialFile: file.name,
+                        utm: this.generateUtm(name, platformId),
+                        purchases: 0,
+                        roas: 0.00
+                    };
+                    
+                    this.data.ads.unshift(newRow);
+                    await this.saveDatabase();
+                    this.renderGrid();
+                    this.showToast(`Saved ${file.name} to ${platformDef.folder} & Row created!`);
+                } catch (err) {
+                    alert("Error saving file. Check permissions.");
+                }
             },
 
             // 5. ROW-LEVEL FILE HANDLING
@@ -616,7 +574,9 @@ I have strictly followed your UI wireframe and logic requirements. **Nothing has
             async processRowFileSave(rowId, file) {
                 const row = this.data.ads.find(a => a.id === rowId);
                 const platformDef = this.platforms.find(p => p.id === row.platform);
-                row.type = file.type.startsWith('video/') ? 'Video' : 'Single';
+                const isVideo = file.type.startsWith('video/');
+                
+                row.type = isVideo ? 'Video' : 'Single';
                 row.materialFile = file.name;
                 
                 try {
@@ -629,7 +589,9 @@ I have strictly followed your UI wireframe and logic requirements. **Nothing has
                     this.showToast(`Saved ${file.name} to ${platformDef.folder}`);
                     await this.saveDatabase();
                     this.renderGrid();
-                } catch (err) { alert("Error saving file."); }
+                } catch (err) {
+                    alert("Error saving file. Check permissions.");
+                }
             },
 
             async getDirHandleByPath(path, create = false) {
@@ -644,13 +606,15 @@ I have strictly followed your UI wireframe and logic requirements. **Nothing has
                     const oldFolderHandle = await this.getDirHandleByPath(oldFolderPath);
                     const oldFileHandle = await oldFolderHandle.getFileHandle(fileName);
                     const fileObj = await oldFileHandle.getFile();
+
                     const newFolderHandle = await this.getDirHandleByPath(newFolderPath, true);
                     const newFileHandle = await newFolderHandle.getFileHandle(fileName, { create: true });
                     const writable = await newFileHandle.createWritable();
                     await writable.write(fileObj);
                     await writable.close();
+
                     await oldFolderHandle.removeEntry(fileName);
-                } catch(e) { console.warn("Could not move file.", e); }
+                } catch(e) { console.warn("Could not physically move file.", e); }
             },
 
             copyToClipboard(text) {
@@ -666,9 +630,16 @@ I have strictly followed your UI wireframe and logic requirements. **Nothing has
                 this.data.ads.forEach((row, index) => {
                     const tr = document.createElement('tr');
                     
-                    const platformOptions = this.platforms.map(p => `<option value="${p.id}" ${row.platform === p.id ? 'selected' : ''}>${p.id}</option>`).join('');
-                    const typeOptions = ['Single', 'Video', 'Carousel'].map(t => `<option value="${t}" ${row.type === t ? 'selected' : ''}>${t}</option>`).join('');
+                    const platformOptions = this.platforms.map(p => 
+                        `<option value="${p.id}" ${row.platform === p.id ? 'selected' : ''}>${p.id}</option>`
+                    ).join('');
+
+                    const typeOptions = ['Single', 'Video', 'Carousel'].map(t => 
+                        `<option value="${t}" ${row.type === t ? 'selected' : ''}>${t}</option>`
+                    ).join('');
+
                     const statusClass = row.status === 'active' ? 'status-active' : row.status === 'paused' ? 'status-paused' : 'status-draft';
+                    
                     const daysDisplay = this.calculateDays(row.status, row.startDate, row.endDate);
 
                     let materialHtml = `
@@ -692,8 +663,16 @@ I have strictly followed your UI wireframe and logic requirements. **Nothing has
                     tr.innerHTML = `
                         <td class="text-center font-mono text-muted">${this.data.ads.length - index}</td>
                         <td><input type="text" class="cell-input font-mono" value="${row.name}" onchange="app.updateField('${row.id}', 'name', this.value)"></td>
-                        <td><select class="cell-input" onchange="app.updateField('${row.id}', 'platform', this.value)">${platformOptions}</select></td>
-                        <td><select class="cell-input" onchange="app.updateField('${row.id}', 'type', this.value)">${typeOptions}</select></td>
+                        <td>
+                            <select class="cell-input" onchange="app.updateField('${row.id}', 'platform', this.value)">
+                                ${platformOptions}
+                            </select>
+                        </td>
+                        <td>
+                            <select class="cell-input" onchange="app.updateField('${row.id}', 'type', this.value)">
+                                ${typeOptions}
+                            </select>
+                        </td>
                         <td><input type="text" class="cell-input" value="${row.url}" placeholder="https://..." onchange="app.updateField('${row.id}', 'url', this.value)"></td>
                         <td class="status-cell">
                             <select class="status-select ${statusClass}" onchange="app.updateField('${row.id}', 'status', this.value)">
@@ -724,12 +703,14 @@ I have strictly followed your UI wireframe and logic requirements. **Nothing has
                 this.setupRowDropzones();
             },
 
+            // 7. Export
             exportCsv() {
                 let csv = "Ad Name,Platform,Type,Landing Page URL,Status,Start Date,End Date,Days Served,Material File,UTM,Purchases,ROAS\n";
                 this.data.ads.forEach(row => {
                     const days = this.calculateDays(row.status, row.startDate, row.endDate);
                     csv += `"${row.name}","${row.platform}","${row.type}","${row.url}","${row.status.toUpperCase()}","${row.startDate}","${row.endDate}","${days}","${row.materialFile}","${row.utm}",${row.purchases},${row.roas}\n`;
                 });
+                
                 const blob = new Blob([csv], { type: 'text/csv' });
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
@@ -739,16 +720,22 @@ I have strictly followed your UI wireframe and logic requirements. **Nothing has
             }
         };
 
-        // Attach listeners for Click-to-Upload Hidden Inputs
+        // Attach listener for Click-to-Upload Hidden Inputs
         document.getElementById('row-file-upload').addEventListener('change', async (e) => {
             const file = e.target.files[0];
-            if (file && app.activeUploadRow) await app.processRowFileSave(app.activeUploadRow, file);
+            if (file && app.activeUploadRow) {
+                await app.processRowFileSave(app.activeUploadRow, file);
+                app.activeUploadRow = null;
+            }
             e.target.value = ''; 
         });
 
-        document.getElementById('master-box-upload').addEventListener('change', async (e) => {
+        document.getElementById('top-file-upload').addEventListener('change', async (e) => {
             const file = e.target.files[0];
-            if (file && app.activeMasterBox) await app.processMasterBoxSave(app.activeMasterBox, file);
+            if (file && app.activeGlobalPlatform) {
+                await app.processGlobalFileSave(app.activeGlobalPlatform, file);
+                app.activeGlobalPlatform = null;
+            }
             e.target.value = ''; 
         });
 
