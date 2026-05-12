@@ -92,7 +92,7 @@
 
         /* DataGrid */
         .workspace { flex: 1; overflow: auto; padding: 0; position: relative; background: var(--bg-base);}
-        .datagrid { width: 100%; border-collapse: collapse; text-align: left; min-width: 1500px;} /* adjusted width slightly */
+        .datagrid { width: 100%; border-collapse: collapse; text-align: left; min-width: 1700px;}
         .datagrid th { position: sticky; top: 0; background: var(--surface); z-index: 10; padding: 12px 16px; font-size: 12px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); white-space: nowrap; box-shadow: 0 1px 0 var(--border);}
         .datagrid td { padding: 0; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); vertical-align: middle; height: 48px; background: transparent; transition: 0.1s;}
         .datagrid tr:hover td { background: var(--surface-hover); }
@@ -112,6 +112,12 @@
         .status-draft { color: var(--status-draft-txt); background: var(--status-draft-bg); }
         .status-active { color: var(--status-active-txt); background: var(--status-active-bg); }
         .status-paused { color: var(--status-paused-txt); background: var(--status-paused-bg); }
+
+        /* Row Dropzone */
+        .file-dropzone { width: 100%; height: 100%; display: flex; align-items: center; justify-content: flex-start; padding: 0 16px; gap: 8px; cursor: pointer; transition: 0.2s; border: 2px dashed transparent;}
+        .file-dropzone.dragover { border-color: var(--accent); background: rgba(70, 167, 88, 0.1); }
+        .file-pill { display: inline-flex; align-items: center; gap: 6px; background: var(--surface); border: 1px solid var(--border); padding: 6px 10px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px;}
+        .file-pill:hover { border-color: var(--accent); }
 
         /* Connect Screen */
         #connect-screen { position: fixed; inset: 0; background: var(--bg-base); z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
@@ -167,11 +173,13 @@
         
         <div class="prep-header-controls">
             <h2 style="font-size: 20px; font-weight: 500;">Master Creative Setup</h2>
-            <div style="display: flex; gap: 12px;">
+            <div style="display: flex; gap: 8px;">
                 <select id="set-selector" class="prep-select" onchange="app.changeActiveSet(this.value)">
                     <!-- Options injected -->
                 </select>
-                <button class="btn btn-secondary" onclick="app.createNewSet()"><i data-lucide="plus"></i> Create New Set</button>
+                <button class="btn btn-secondary" onclick="app.createNewSet()"><i data-lucide="plus"></i> New Set</button>
+                <button class="btn btn-secondary" onclick="app.resetActiveSet()"><i data-lucide="rotate-ccw"></i> Reset Set</button>
+                <button class="btn btn-secondary" style="color: var(--status-paused-txt); border-color: rgba(220, 38, 38, 0.3);" onclick="app.deleteActiveSet()" title="Delete Set"><i data-lucide="trash-2"></i></button>
             </div>
         </div>
 
@@ -210,10 +218,11 @@
                         <th style="width: 140px;">Start Date</th>
                         <th style="width: 140px;">End Date</th>
                         <th style="width: 100px; text-align: center;">Days</th>
+                        <th style="width: 260px;">Material File (Drop or Click)</th>
                         <th style="width: 220px;">UTM Tracker</th>
                         <th style="width: 100px; text-align: right;">Purchases</th>
                         <th style="width: 100px; text-align: right;">ROAS</th>
-                        <th style="width: 80px; text-align: center;">Act</th>
+                        <th style="width: 60px; text-align: center;">Act</th>
                     </tr>
                 </thead>
                 <tbody id="grid-body">
@@ -307,10 +316,9 @@
             },
 
             // ==========================================
-            // PRE-FLIGHT DASHBOARD ENGINE (NEW)
+            // PRE-FLIGHT DASHBOARD ENGINE 
             // ==========================================
             
-            // View Switcher with Gatekeeper Logic
             switchView(viewName) {
                 if (viewName === 'tracker') {
                     // GATEKEEPER CHECK: Is at least one platform ready in the active set?
@@ -327,7 +335,7 @@
                     document.getElementById('tab-prep').classList.remove('active');
                     document.getElementById('tab-tracker').classList.add('active');
                     
-                    this.renderGlobalDropzones(); // Re-render to apply locks
+                    this.renderGlobalDropzones(); 
                 } else {
                     document.getElementById('view-tracker').classList.add('hidden');
                     document.getElementById('view-prep').classList.remove('hidden');
@@ -347,7 +355,6 @@
                     platforms: {}
                 };
                 
-                // Initialize all as pending
                 this.platforms.forEach(p => { newSet.platforms[p.id] = 'pending'; });
                 
                 this.data.creativeSets.unshift(newSet);
@@ -376,6 +383,37 @@
                     set.platforms[platformId] = set.platforms[platformId] === 'pending' ? 'ready' : 'pending';
                     this.saveDatabase();
                     this.renderPrepView();
+                }
+            },
+
+            // Clean or Reset the Active Set
+            resetActiveSet() {
+                if (!this.activeSetId) return;
+                if (confirm("Reset this Creative Set? This will clear the link and mark all platforms as Pending.")) {
+                    const set = this.data.creativeSets.find(s => s.id === this.activeSetId);
+                    if (set) {
+                        set.canvaLink = '';
+                        this.platforms.forEach(p => { set.platforms[p.id] = 'pending'; });
+                        this.saveDatabase();
+                        this.renderPrepView();
+                        this.showToast("Set reset successfully");
+                    }
+                }
+            },
+
+            deleteActiveSet() {
+                if (!this.activeSetId) return;
+                if (confirm("Delete this Creative Set permanently?")) {
+                    this.data.creativeSets = this.data.creativeSets.filter(s => s.id !== this.activeSetId);
+                    
+                    if (this.data.creativeSets.length === 0) {
+                        this.createNewSet("New Creative Set"); 
+                    } else {
+                        this.activeSetId = this.data.creativeSets[0].id;
+                    }
+                    this.saveDatabase();
+                    this.renderPrepView();
+                    this.showToast("Set deleted");
                 }
             },
 
@@ -412,7 +450,7 @@
             },
 
             // ==========================================
-            // SMART TRACKER ENGINE
+            // SMART TRACKER ENGINE 
             // ==========================================
             
             getPlatformPrefix(platform) {
@@ -484,15 +522,6 @@
                 const row = this.data.ads.find(a => a.id === id);
                 if(row) this.addRow(row);
             },
-            
-            deleteRow(id) {
-                if(confirm("Are you sure you want to delete this ad row?")) {
-                    this.data.ads = this.data.ads.filter(a => a.id !== id);
-                    this.saveDatabase();
-                    this.renderGrid();
-                    this.showToast("Row deleted");
-                }
-            },
 
             async updateField(id, field, value) {
                 const row = this.data.ads.find(a => a.id === id);
@@ -511,7 +540,7 @@
                     row.platform = value;
                     row.name = this.generateName(value); 
                     row.utm = this.generateUtm(row.name, row.platform);
-                    this.showToast(`Ad auto-renamed to ${row.name}`);
+                    this.showToast(`Platform changed. Ad auto-renamed to ${row.name}`);
                 } 
                 else if (field === 'status') {
                     const oldStatus = row.status;
@@ -534,7 +563,7 @@
                 this.renderGrid(); 
             },
 
-            // TOP-LEVEL GLOBAL DROPZONES (LOCKED BY SET PREP)
+            // TOP-LEVEL GLOBAL DROPZONES
             renderGlobalDropzones() {
                 const container = document.getElementById('global-dropzones');
                 container.innerHTML = '';
@@ -611,6 +640,48 @@
                 } catch (err) { alert("Error saving file. Check permissions."); }
             },
 
+            // ROW-LEVEL FILE HANDLING
+            setupRowDropzones() {
+                const dropzones = document.querySelectorAll('.file-dropzone');
+                dropzones.forEach(zone => {
+                    zone.addEventListener('click', (e) => {
+                        if(e.target.closest('.file-pill')) return; 
+                        this.activeUploadRow = zone.dataset.id;
+                        document.getElementById('row-file-upload').click();
+                    });
+
+                    zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('dragover'); });
+                    zone.addEventListener('dragleave', () => { zone.classList.remove('dragover'); });
+                    zone.addEventListener('drop', async (e) => {
+                        e.preventDefault();
+                        zone.classList.remove('dragover');
+                        const file = e.dataTransfer.files[0];
+                        if(file) await this.processRowFileSave(zone.dataset.id, file);
+                    });
+                });
+            },
+
+            async processRowFileSave(rowId, file) {
+                const row = this.data.ads.find(a => a.id === rowId);
+                const platformDef = this.platforms.find(p => p.id === row.platform);
+                const isVideo = file.type.startsWith('video/');
+                
+                row.type = isVideo ? 'Video' : 'Single';
+                row.materialFile = file.name;
+                
+                try {
+                    const folderHandle = await this.getDirHandleByPath(platformDef.folder, true);
+                    const fileHandle = await folderHandle.getFileHandle(file.name, { create: true });
+                    const writable = await fileHandle.createWritable();
+                    await writable.write(file);
+                    await writable.close();
+                    
+                    this.showToast(`Saved to ${platformDef.folder}`);
+                    await this.saveDatabase();
+                    this.renderGrid();
+                } catch (err) { alert("Error saving file. Check permissions."); }
+            },
+
             async getDirHandleByPath(path, create = false) {
                 let handle = this.dirHandle;
                 const parts = path.split('/').filter(p => p.trim() !== '');
@@ -659,6 +730,24 @@
                     
                     const daysDisplay = this.calculateDays(row.status, row.startDate, row.endDate);
 
+                    let materialHtml = `
+                        <div class="file-dropzone" data-id="${row.id}">
+                            <span style="color:var(--text-muted); font-size:12px; display:flex; align-items:center; gap:6px;">
+                                <i data-lucide="upload-cloud" style="width:14px;height:14px;"></i> Drop or Click
+                            </span>
+                        </div>`;
+                        
+                    if (row.materialFile) {
+                        materialHtml = `
+                            <div class="file-dropzone" data-id="${row.id}" title="${row.materialFile}">
+                                <div class="file-pill" onclick="app.copyToClipboard('${row.materialFile}')" style="cursor:copy;">
+                                    <i data-lucide="${row.type==='Video' ? 'video' : 'image'}" style="width:12px;height:12px; color:var(--accent);"></i>
+                                    ${row.materialFile}
+                                </div>
+                            </div>
+                        `;
+                    }
+
                     tr.innerHTML = `
                         <td class="text-center font-mono text-muted">${this.data.ads.length - index}</td>
                         <td><input type="text" class="cell-input font-mono" value="${row.name}" onchange="app.updateField('${row.id}', 'name', this.value)"></td>
@@ -690,23 +779,23 @@
                         </td>
                         <td><input type="number" class="cell-input font-mono text-right" value="${row.purchases}" onchange="app.updateField('${row.id}', 'purchases', parseInt(this.value)||0)"></td>
                         <td><input type="number" step="0.01" class="cell-input font-mono text-right" value="${row.roas}" onchange="app.updateField('${row.id}', 'roas', parseFloat(this.value)||0.00)"></td>
-                        <td class="text-center" style="display:flex; justify-content:center; align-items:center; gap:4px; height:100%;">
+                        <td class="text-center">
                             <button class="btn btn-secondary" style="padding:6px; border:none;" onclick="app.duplicateRow('${row.id}')" title="Duplicate Row"><i data-lucide="copy" style="width:14px;height:14px;"></i></button>
-                            <button class="btn btn-secondary" style="padding:6px; border:none; color:var(--status-paused-txt);" onclick="app.deleteRow('${row.id}')" title="Delete Row"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>
                         </td>
                     `;
                     tbody.appendChild(tr);
                 });
 
                 lucide.createIcons();
+                this.setupRowDropzones();
             },
 
             // 7. Export
             exportCsv() {
-                let csv = "Ad Name,Platform,Type,Landing Page URL,Status,Start Date,End Date,Days Served,UTM,Purchases,ROAS\n";
+                let csv = "Ad Name,Platform,Type,Landing Page URL,Status,Start Date,End Date,Days Served,Material File,UTM,Purchases,ROAS\n";
                 this.data.ads.forEach(row => {
                     const days = this.calculateDays(row.status, row.startDate, row.endDate);
-                    csv += `"${row.name}","${row.platform}","${row.type}","${row.url}","${row.status.toUpperCase()}","${row.startDate}","${row.endDate}","${days}","${row.utm}",${row.purchases},${row.roas}\n`;
+                    csv += `"${row.name}","${row.platform}","${row.type}","${row.url}","${row.status.toUpperCase()}","${row.startDate}","${row.endDate}","${days}","${row.materialFile}","${row.utm}",${row.purchases},${row.roas}\n`;
                 });
                 
                 const blob = new Blob([csv], { type: 'text/csv' });
@@ -719,6 +808,15 @@
         };
 
         // Input for Click-to-Upload
+        document.getElementById('row-file-upload').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file && app.activeUploadRow) {
+                await app.processRowFileSave(app.activeUploadRow, file);
+                app.activeUploadRow = null;
+            }
+            e.target.value = ''; 
+        });
+
         document.getElementById('top-file-upload').addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (file && app.activeGlobalPlatform) {
